@@ -8,4 +8,6 @@
     <string name="confirm_password">Confirm password</string>
     <string name="register">Register</string>
     <string name="cancel">Cancel</string>
+    <string name="testEmail">zmn.ashraf@gmail.com</string>
+    <string name="testPass">123456</string>
 </resources>

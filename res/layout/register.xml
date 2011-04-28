@@ -10,23 +10,23 @@
 			android:layout_height="wrap_content">
 			<TextView android:layout_height="wrap_content" android:id="@+id/textView1"
 				android:text="@string/email" android:layout_width="wrap_content"></TextView>
-			<EditText android:text="EditText" android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:id="@+id/txtEmail"></EditText>
+			<EditText android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:id="@+id/txtEmail" android:text="@string/testEmail"></EditText>
 		</TableRow>
 		<TableRow android:id="@+id/tableRow2" android:layout_width="wrap_content"
 			android:layout_height="wrap_content">
 			<TextView android:layout_height="wrap_content" android:id="@+id/textView1"
 				android:layout_width="wrap_content" android:text="@string/password"></TextView>
-			<EditText android:text="EditText" android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:id="@+id/txtPass" android:password="true"></EditText>
+			<EditText android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:id="@+id/txtPass" android:password="true" android:text="@string/testPass"></EditText>
 
 		</TableRow>
 		<TableRow android:id="@+id/tableRow2" android:layout_width="wrap_content"
 			android:layout_height="wrap_content">
 			<TextView android:layout_height="wrap_content" android:id="@+id/textView1"
 				android:layout_width="wrap_content" android:text="@string/confirm_password"></TextView>
-			<EditText android:text="EditText" android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:id="@+id/txtConfimPass" android:password="true"></EditText>
+			<EditText android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:id="@+id/txtConfimPass" android:password="true" android:text="@string/testPass"></EditText>
 		</TableRow>
 		<TableRow android:id="@+id/tableRow2" android:layout_width="wrap_content"
 			android:layout_height="wrap_content">

@@ -37,5 +37,7 @@ public final class R {
         public static final int password=0x7f040004;
         public static final int register=0x7f040006;
         public static final int register_user_title=0x7f040002;
+        public static final int testEmail=0x7f040008;
+        public static final int testPass=0x7f040009;
     }
 }

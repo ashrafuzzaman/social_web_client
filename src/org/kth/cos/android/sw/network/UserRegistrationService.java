@@ -2,7 +2,6 @@ package org.kth.cos.android.sw.network;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,12 +13,14 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class UserRegistrationService {
-	public String register(String email, String password) throws ClientProtocolException, IOException {
+	public boolean register(String email, String password) throws ClientProtocolException, IOException, JSONException {
 		// Create a new HttpClient and Post Header
 		HttpClient httpclient = new DefaultHttpClient();
-		HttpPost httppost = new HttpPost("http://social-web.heroku.com/api/users/register");
+		HttpPost httppost = new HttpPost("http://social-web.heroku.com/api/users");
 
 		// Add your data
 		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
@@ -33,9 +34,8 @@ public class UserRegistrationService {
 		ByteArrayOutputStream ostream = new ByteArrayOutputStream();
 		response.getEntity().writeTo(ostream);
 
-		// Toast.makeText(this, ostream.toString(),
-		// Toast.LENGTH_LONG).show();
-		return ostream.toString();
+		//JSONObject jObject  = new JSONObject(ostream.toString());
+		return true;
 	}
 
 }
