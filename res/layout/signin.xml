@@ -3,7 +3,7 @@
 	android:orientation="vertical" android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
 	<TextView android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:text="@string/register_user_title" />
+		android:layout_height="wrap_content" android:text="@string/signin_user_title"/>
 	<TableLayout android:layout_height="fill_parent"
 		android:id="@+id/tableLayout1" android:layout_width="wrap_content">
 		<TableRow android:id="@+id/tableRow1" android:layout_width="wrap_content"
@@ -11,28 +11,22 @@
 			<TextView android:layout_height="wrap_content" android:id="@+id/textView1"
 				android:text="@string/email" android:layout_width="wrap_content"></TextView>
 			<EditText android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:id="@+id/txtEmail" android:text="@string/testEmail"></EditText>
+				android:layout_height="wrap_content" android:id="@+id/txtEmail"
+				android:text="@string/testEmail"></EditText>
 		</TableRow>
-		<TableRow android:id="@+id/tableRow3" android:layout_width="wrap_content"
+		<TableRow android:id="@+id/tableRow2" android:layout_width="wrap_content"
 			android:layout_height="wrap_content">
 			<TextView android:layout_height="wrap_content" android:id="@+id/textView1"
 				android:layout_width="wrap_content" android:text="@string/password"></TextView>
 			<EditText android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:id="@+id/txtPass" android:password="true" android:text="@string/testPass"></EditText>
+				android:layout_height="wrap_content" android:id="@+id/txtPass"
+				android:password="true" android:text="@string/testPass"></EditText>
 
 		</TableRow>
-		<TableRow android:id="@+id/tableRow4" android:layout_width="wrap_content"
-			android:layout_height="wrap_content">
-			<TextView android:layout_height="wrap_content" android:id="@+id/textView1"
-				android:layout_width="wrap_content" android:text="@string/confirm_password"></TextView>
-			<EditText android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:id="@+id/txtConfimPass" android:password="true" android:text="@string/testPass"></EditText>
-		</TableRow>
-		<TableRow android:id="@+id/tableRow2" android:layout_width="wrap_content"
+		<TableRow android:id="@+id/tableRow3" android:layout_width="wrap_content"
 			android:layout_height="wrap_content">
 			<Button android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:id="@+id/btnRegister"
-				android:text="@string/register"></Button>
+				android:layout_height="wrap_content" android:text="@string/signin" android:id="@+id/btnSignin"></Button>
 			<Button android:id="@+id/btnCancel" android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:text="@string/cancel"></Button>
 		</TableRow>
