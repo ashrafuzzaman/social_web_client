@@ -4,7 +4,8 @@ import java.io.IOException;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
-import org.kth.cos.android.sw.data.ResponseStatus;
+import org.kth.cos.android.sw.data.Profile;
+import org.kth.cos.android.sw.data.Response;
 import org.kth.cos.android.sw.network.UserAuthenticationService;
 
 import android.app.Activity;
@@ -27,6 +28,7 @@ public class SigninUserActivity extends Activity {
 			public void onClick(View v) {
 				Intent myIntent = new Intent(SigninUserActivity.this, Welcome.class);
 				SigninUserActivity.this.startActivity(myIntent);
+				SigninUserActivity.this.finish();
 			}
 		});
 
@@ -36,8 +38,9 @@ public class SigninUserActivity extends Activity {
 				String email = ((TextView) findViewById(R.id.txtEmail)).getText().toString();
 				String pass = ((TextView) findViewById(R.id.txtPass)).getText().toString();
 				try {
-					ResponseStatus responseStatus = new UserAuthenticationService().signin(email, pass);
-					Toast.makeText(getBaseContext(), responseStatus.getMessage(), Toast.LENGTH_SHORT).show();
+					Response responseStatus = new UserAuthenticationService().signin(email, pass);
+					Profile profile = (Profile)responseStatus.getResponse();
+					Toast.makeText(getBaseContext(), responseStatus.getMessage() + " with token : " + profile.getAuthToken(), Toast.LENGTH_SHORT).show();
 				} catch (ClientProtocolException e) {
 					Toast.makeText(getBaseContext(), "ClientProtocolException " + e.getStackTrace().toString(), Toast.LENGTH_SHORT).show();
 					e.printStackTrace();

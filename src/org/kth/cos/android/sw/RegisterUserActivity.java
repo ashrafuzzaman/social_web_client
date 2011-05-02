@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
-import org.kth.cos.android.sw.data.ResponseStatus;
+import org.kth.cos.android.sw.data.Response;
 import org.kth.cos.android.sw.network.UserAuthenticationService;
 
 import android.app.Activity;
@@ -27,6 +27,7 @@ public class RegisterUserActivity extends Activity {
 			public void onClick(View v) {
 				Intent myIntent = new Intent(RegisterUserActivity.this, Welcome.class);
 				RegisterUserActivity.this.startActivity(myIntent);
+				RegisterUserActivity.this.finish();
 			}
 		});
 
@@ -40,7 +41,7 @@ public class RegisterUserActivity extends Activity {
 					Toast.makeText(getBaseContext(), "Password does not match [" + pass + "] with [" + confirmPass + "]", Toast.LENGTH_SHORT).show();
 				} else {
 					try {
-						ResponseStatus responseStatus = new UserAuthenticationService().register(email, pass);
+						Response responseStatus = new UserAuthenticationService().register(email, pass);
 						Toast.makeText(getBaseContext(), responseStatus.getMessage(), Toast.LENGTH_SHORT).show();
 					} catch (ClientProtocolException e) {
 						Toast.makeText(getBaseContext(), "ClientProtocolException " + e.getStackTrace().toString(), Toast.LENGTH_SHORT).show();

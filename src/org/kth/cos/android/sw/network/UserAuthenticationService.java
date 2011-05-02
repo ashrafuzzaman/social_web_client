@@ -16,11 +16,12 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.kth.cos.android.sw.data.ResponseStatus;
+import org.kth.cos.android.sw.data.Profile;
+import org.kth.cos.android.sw.data.Response;
 import org.kth.cos.android.sw.data.Status;
 
 public class UserAuthenticationService {
-	public ResponseStatus register(String email, String password) throws ClientProtocolException, IOException, JSONException {
+	public Response register(String email, String password) throws ClientProtocolException, IOException, JSONException {
 		// Create a new HttpClient and Post Header
 		HttpClient httpclient = new DefaultHttpClient();
 
@@ -32,13 +33,13 @@ public class UserAuthenticationService {
 
 		JSONObject rootJson = getJsonResponse(response);
 		if (rootJson.has("error")) {
-			return new ResponseStatus(Status.STATUS_ERROR, rootJson.getJSONArray("error").getString(0));
+			return new Response(Status.STATUS_ERROR, rootJson.getJSONArray("error").getString(0));
 		} else {
-			return new ResponseStatus(Status.STATUS_SUCCESS, "User created");
+			return new Response(Status.STATUS_SUCCESS, "User created");
 		}
 	}
 
-	public ResponseStatus signin(String email, String password) throws ClientProtocolException, IOException, JSONException {
+	public Response signin(String email, String password) throws ClientProtocolException, IOException, JSONException {
 		// Create a new HttpClient and Post Header
 		HttpClient httpclient = new DefaultHttpClient();
 
@@ -50,9 +51,11 @@ public class UserAuthenticationService {
 
 		JSONObject rootJson = getJsonResponse(response);
 		if (rootJson.has("error")) {
-			return new ResponseStatus(Status.STATUS_ERROR, rootJson.getString("error"));
+			return new Response(Status.STATUS_ERROR, rootJson.getString("error"));
 		} else {
-			return new ResponseStatus(Status.STATUS_SUCCESS, "User Signed in");
+			JSONObject userJson = rootJson.getJSONObject("user");
+			Profile profile = new Profile(userJson.getString("email"), password, userJson.getString("authentication_token"));
+			return new Response(Status.STATUS_SUCCESS, "User Signed in", profile);
 		}
 	}
 
