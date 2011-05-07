@@ -35,7 +35,8 @@ public class UserAuthenticationService {
 		if (rootJson.has("error")) {
 			return new Response(Status.STATUS_ERROR, rootJson.getJSONArray("error").getString(0));
 		} else {
-			return new Response(Status.STATUS_SUCCESS, "User created");
+			Profile profile = new Profile(email, password);
+			return new Response(Status.STATUS_SUCCESS, "User created", profile);
 		}
 	}
 

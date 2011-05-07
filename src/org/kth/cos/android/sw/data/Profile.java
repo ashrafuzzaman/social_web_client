@@ -14,6 +14,14 @@ public class Profile {
 	public static final String AUTH_TOKEN = "AUTH_TOKEN";
 
 	public Profile() {
+		this.email = "";
+		this.password = "";
+		this.authToken = "";
+	}
+
+	public Profile(String email, String password) {
+		this.email = email;
+		this.password = password;
 	}
 
 	public Profile(String email, String password, String authToken) {
