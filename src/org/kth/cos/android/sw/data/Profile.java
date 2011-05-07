@@ -15,7 +15,7 @@ public class Profile {
 
 	public Profile() {
 	}
-	
+
 	public Profile(String email, String password, String authToken) {
 		this.email = email;
 		this.password = password;
@@ -23,15 +23,23 @@ public class Profile {
 	}
 
 	public static Profile getProfile(Activity currentActivity) {
-		SharedPreferences settings = currentActivity.getSharedPreferences(
-				PREFS_NAME, 0);
-		return new Profile(settings.getString(USER_EMAIL, ""),
-				settings.getString(USER_PASSWORD, ""),
-				settings.getString(AUTH_TOKEN, ""));
+		SharedPreferences settings = currentActivity.getSharedPreferences(PREFS_NAME, 0);
+		return new Profile(settings.getString(USER_EMAIL, ""), settings.getString(USER_PASSWORD, ""), settings.getString(AUTH_TOKEN, ""));
+	}
+
+	public boolean isSignedIn() {
+		return getAuthToken() != null && !getAuthToken().equals("");
 	}
 
 	public boolean isUnregisteredUser() {
 		return email == null || email.equals("");
+	}
+
+	public void clearProfile(Activity currentActivity) {
+		email = "";
+		password = "";
+		authToken = "";
+		save(currentActivity);
 	}
 
 	public String getEmail() {
@@ -53,14 +61,13 @@ public class Profile {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
 	public void setAuthToken(String authToken) {
 		this.authToken = authToken;
 	}
-	
+
 	public void save(Activity currentActivity) {
-		SharedPreferences settings = currentActivity.getSharedPreferences(
-				PREFS_NAME, 0);
+		SharedPreferences settings = currentActivity.getSharedPreferences(PREFS_NAME, 0);
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putString(USER_EMAIL, email);
 		editor.putString(USER_PASSWORD, password);

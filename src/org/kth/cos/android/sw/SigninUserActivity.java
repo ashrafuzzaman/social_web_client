@@ -20,18 +20,33 @@ public class SigninUserActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		setContentView(R.layout.signin);
 
+		Profile profile = Profile.getProfile(this);
+		if (profile.isSignedIn()) {
+			switchToMainActivity();
+		} else {
+			attachSigninBtnEvent();
+			attachBtnCancel();
+		}
+	}
+
+	private void attachBtnCancel() {
 		Button btnCancel = (Button) findViewById(R.id.btnCancel);
 		btnCancel.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				Intent myIntent = new Intent(SigninUserActivity.this, Welcome.class);
-				SigninUserActivity.this.startActivity(myIntent);
-				SigninUserActivity.this.finish();
+				switchToMainActivity();
 			}
 		});
+	}
 
+	private void switchToMainActivity() {
+		Intent myIntent = new Intent(SigninUserActivity.this, Welcome.class);
+		SigninUserActivity.this.startActivity(myIntent);
+		SigninUserActivity.this.finish();
+	}
+
+	private void attachSigninBtnEvent() {
 		Button button = (Button) findViewById(R.id.btnSignin);
 		button.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -39,8 +54,9 @@ public class SigninUserActivity extends Activity {
 				String pass = ((TextView) findViewById(R.id.txtPass)).getText().toString();
 				try {
 					Response responseStatus = new UserAuthenticationService().signin(email, pass);
-					Profile profile = (Profile)responseStatus.getResponse();
-					Toast.makeText(getBaseContext(), responseStatus.getMessage() + " with token : " + profile.getAuthToken(), Toast.LENGTH_SHORT).show();
+					Profile profile = (Profile) responseStatus.getResponse();
+					profile.save(SigninUserActivity.this);
+					switchToMainActivity();
 				} catch (ClientProtocolException e) {
 					Toast.makeText(getBaseContext(), "ClientProtocolException " + e.getStackTrace().toString(), Toast.LENGTH_SHORT).show();
 					e.printStackTrace();
