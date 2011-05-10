@@ -8,16 +8,14 @@ import org.kth.cos.android.sw.data.Profile;
 import org.kth.cos.android.sw.data.Response;
 import org.kth.cos.android.sw.network.UserAuthenticationService;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class SigninUserActivity extends Activity {
+public class SigninUserActivity extends BaseActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -63,13 +61,13 @@ public class SigninUserActivity extends Activity {
 					profile.save(SigninUserActivity.this);
 					switchToMainActivity();
 				} catch (ClientProtocolException e) {
-					Toast.makeText(getBaseContext(), "ClientProtocolException " + e.getStackTrace().toString(), Toast.LENGTH_SHORT).show();
+					showMessage("ClientProtocolException " + e.getStackTrace().toString());
 					e.printStackTrace();
 				} catch (IOException e) {
-					Toast.makeText(getBaseContext(), "IOException " + e.toString(), Toast.LENGTH_SHORT).show();
+					showMessage("IOException " + e.getStackTrace().toString());
 					e.printStackTrace();
 				} catch (JSONException e) {
-					Toast.makeText(getBaseContext(), e.toString(), Toast.LENGTH_SHORT).show();
+					showMessage("JSONException " + e.getStackTrace().toString());
 					e.printStackTrace();
 				}
 			}

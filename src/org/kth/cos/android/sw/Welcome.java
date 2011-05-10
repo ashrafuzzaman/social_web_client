@@ -2,14 +2,12 @@ package org.kth.cos.android.sw;
 
 import org.kth.cos.android.sw.data.Profile;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
-public class Welcome extends Activity {
+public class Welcome extends BaseActivity {
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -28,7 +26,7 @@ public class Welcome extends Activity {
 			attachBtnClearCach(profile);
 			makeInvisible(R.id.btnRegister);
 			makeInvisible(R.id.btnSignin);
-			Toast.makeText(getBaseContext(), "Signed in with token : " + profile.getAuthToken(), Toast.LENGTH_SHORT).show();
+			showMessage("Signed in with token : " + profile.getAuthToken());
 		}
 
 		attachBtnExit();
@@ -39,7 +37,6 @@ public class Welcome extends Activity {
 		makeVisible(R.id.btnExit);
 		btnExit.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				Toast.makeText(getBaseContext(), "Exiting", Toast.LENGTH_SHORT).show();
 				Welcome.this.finish();
 			}
 		});
@@ -50,7 +47,7 @@ public class Welcome extends Activity {
 		makeVisible(R.id.btnClrCach);
 		btnClrCach.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				Toast.makeText(getBaseContext(), "Clearing cach", Toast.LENGTH_SHORT).show();
+				showMessage("Clearing cach");
 				profile.clearProfile(Welcome.this);
 				generateView();
 			}
@@ -79,14 +76,6 @@ public class Welcome extends Activity {
 				Welcome.this.finish();
 			}
 		});
-	}
-
-	private void makeInvisible(int viewId) {
-		findViewById(viewId).setVisibility(View.GONE);
-	}
-
-	private void makeVisible(int viewId) {
-		findViewById(viewId).setVisibility(View.VISIBLE);
 	}
 
 }
