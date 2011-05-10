@@ -7,16 +7,27 @@ public class Profile {
 	private String email;
 	private String password;
 	private String authToken;
+	private String dataStoreServer;
 
 	public static final String PREFS_NAME = "ProfilePreferrence";
 	public static final String USER_EMAIL = "USER_EMAIL";
 	public static final String USER_PASSWORD = "USER_PASSWORD";
 	public static final String AUTH_TOKEN = "AUTH_TOKEN";
+	public static final String DATA_STORE_SERVER = "DATA_STORE_SERVER";
 
 	public Profile() {
 		this.email = "";
 		this.password = "";
 		this.authToken = "";
+		this.dataStoreServer = "";
+	}
+
+	public Profile(String email, String password, String authToken, String dataStoreServer) {
+		super();
+		this.email = email;
+		this.password = password;
+		this.authToken = authToken;
+		this.dataStoreServer = dataStoreServer;
 	}
 
 	public Profile(String email, String password) {
@@ -60,6 +71,10 @@ public class Profile {
 
 	public String getAuthToken() {
 		return authToken;
+	}
+
+	public String getDataStoreServer() {
+		return dataStoreServer;
 	}
 
 	public void setEmail(String email) {
