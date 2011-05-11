@@ -21,6 +21,8 @@ import org.json.JSONObject;
 import org.kth.cos.android.sw.data.Response;
 import org.kth.cos.android.sw.data.Status;
 
+import android.util.Log;
+
 public class WebServiceBase {
 	private String baseUrl;
 	
@@ -59,6 +61,7 @@ public class WebServiceBase {
 	private JSONObject getJsonResponse(HttpResponse response) throws IOException, JSONException {
 		ByteArrayOutputStream ostream = new ByteArrayOutputStream();
 		response.getEntity().writeTo(ostream);
+		Log.d("Json Response", ostream.toString());
 		return new JSONObject(ostream.toString());
 	}
 

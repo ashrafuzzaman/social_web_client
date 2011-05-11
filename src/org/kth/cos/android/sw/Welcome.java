@@ -1,9 +1,15 @@
 package org.kth.cos.android.sw;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.kth.cos.android.sw.data.Profile;
+import org.kth.cos.android.sw.data.Response;
+import org.kth.cos.android.sw.network.DataServerService;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -22,8 +28,10 @@ public class Welcome extends BaseActivity {
 			attachBtnRegister();
 			attachBtnSignin();
 			makeInvisible(R.id.btnClrCach);
+			makeInvisible(R.id.btnFrndDataStore);
 		} else {
 			attachBtnClearCach(profile);
+			attachBtnFriendsDatastore(profile);
 			makeInvisible(R.id.btnRegister);
 			makeInvisible(R.id.btnSignin);
 			showMessage("Signed in with token : " + profile.getAuthToken());
@@ -74,6 +82,33 @@ public class Welcome extends BaseActivity {
 				Intent myIntent = new Intent(Welcome.this, RegisterUserActivity.class);
 				Welcome.this.startActivity(myIntent);
 				Welcome.this.finish();
+			}
+		});
+	}
+
+	private void attachBtnFriendsDatastore(final Profile profile) {
+		Button btnFrndDataStore = (Button) findViewById(R.id.btnFrndDataStore);
+		makeVisible(R.id.btnExit);
+
+		final List<String> emails = new ArrayList<String>();
+		emails.add("ashrafuzzaman.g2@gmail.com");
+		emails.add("test@test.com");
+		btnFrndDataStore.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				try {
+					Response response = new DataServerService().getDataServiceHost(profile.getEmail(), profile.getAuthToken(), emails);
+					StringBuffer resposeStr = new StringBuffer();
+					List<Profile> profiles = (List<Profile>) response.getResponse();
+					for (Profile profileObj : profiles) {
+						Log.i("FrndList", profileObj.getEmail());
+						resposeStr.append(profileObj.getEmail() + " " + profileObj.getDataStoreServer() + "\n");
+					}
+					showMessage(resposeStr.toString());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					Log.e("FrindList", e.getMessage(), e);
+				}
 			}
 		});
 	}

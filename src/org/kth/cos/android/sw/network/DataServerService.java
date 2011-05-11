@@ -1,7 +1,6 @@
 package org.kth.cos.android.sw.network;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +15,7 @@ import org.kth.cos.android.sw.data.Status;
 
 public class DataServerService extends WebServiceBase {
 
-	public DataServerService(String baseUrl) {
+	public DataServerService() {
 		super("http://social-web.heroku.com");
 	}
 
@@ -37,9 +36,10 @@ public class DataServerService extends WebServiceBase {
 		params.put("email", myEmail);
 		params.put("auth_token", auth_token);
 		params.put("emails", join(emails));
-		Response response = post("/api/update_data_service_host.json", params);
+		Response response = post("/api/data_service_hosts.json", params);
 		if (response.getStatus() == Status.STATUS_SUCCESS) {
 			response.setMessage("Data servers found");
+			response.setResponse(createProfileList(response.getResponseJson()));
 		}
 		return response;
 	}
@@ -60,7 +60,7 @@ public class DataServerService extends WebServiceBase {
 		JSONArray userArray = rootJsonObject.getJSONArray("users");
 		List<Profile> profiles = new ArrayList<Profile>();
 		for (int i = 0; i < userArray.length(); i++) {
-			JSONObject userObject = userArray.getJSONObject(i);
+			JSONObject userObject = userArray.getJSONObject(i).getJSONObject("user");
 			profiles.add(new Profile(userObject.getString("email"), "", "", userObject.getString("data_service_host")));
 		}
 		return profiles;

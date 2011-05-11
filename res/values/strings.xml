@@ -14,4 +14,5 @@
     <string name="signin_user_title">Sign in for existing user</string>
     <string name="exit">Exit</string>
     <string name="clear_cach">Clear cach</string>
+    <string name="friendsDatastore">Fetch friends Datastore</string>
 </resources>
