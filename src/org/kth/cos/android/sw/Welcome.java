@@ -3,6 +3,9 @@ package org.kth.cos.android.sw;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.kth.cos.android.sw.activities.BaseActivity;
+import org.kth.cos.android.sw.activities.RegisterUserActivity;
+import org.kth.cos.android.sw.activities.SigninUserActivity;
 import org.kth.cos.android.sw.data.Profile;
 import org.kth.cos.android.sw.data.Response;
 import org.kth.cos.android.sw.network.DataServerService;
@@ -31,7 +34,7 @@ public class Welcome extends BaseActivity {
 			makeInvisible(R.id.btnFrndDataStore);
 		} else {
 			attachBtnClearCach(profile);
-			attachBtnFriendsDatastore(profile);
+			//attachBtnFriendsDatastore(profile);
 			makeInvisible(R.id.btnRegister);
 			makeInvisible(R.id.btnSignin);
 			showMessage("Signed in with token : " + profile.getAuthToken());

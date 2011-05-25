@@ -1,11 +1,17 @@
-package org.kth.cos.android.sw;
+package org.kth.cos.android.sw.activities;
 
 import java.io.IOException;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
+import org.kth.cos.android.sw.AccountHelper;
+import org.kth.cos.android.sw.R;
+import org.kth.cos.android.sw.Welcome;
+import org.kth.cos.android.sw.R.id;
+import org.kth.cos.android.sw.R.layout;
 import org.kth.cos.android.sw.data.Profile;
 import org.kth.cos.android.sw.data.Response;
+import org.kth.cos.android.sw.network.DataAuthenticationService;
 import org.kth.cos.android.sw.network.UserAuthenticationService;
 
 import android.content.Intent;
@@ -58,6 +64,10 @@ public class SigninUserActivity extends BaseActivity {
 				try {
 					Response responseStatus = new UserAuthenticationService().signin(email, pass);
 					Profile profile = (Profile) responseStatus.getResponse();
+					profile.save(SigninUserActivity.this);
+					
+					responseStatus = new DataAuthenticationService().signin(email, pass);
+					profile = (Profile) responseStatus.getResponse();
 					profile.save(SigninUserActivity.this);
 					switchToMainActivity();
 				} catch (ClientProtocolException e) {

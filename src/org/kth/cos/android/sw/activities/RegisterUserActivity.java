@@ -1,17 +1,20 @@
-package org.kth.cos.android.sw;
+package org.kth.cos.android.sw.activities;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
+import org.kth.cos.android.sw.AccountHelper;
+import org.kth.cos.android.sw.R;
+import org.kth.cos.android.sw.Welcome;
+import org.kth.cos.android.sw.R.id;
+import org.kth.cos.android.sw.R.layout;
 import org.kth.cos.android.sw.data.Profile;
 import org.kth.cos.android.sw.data.Response;
 import org.kth.cos.android.sw.data.Status;
+import org.kth.cos.android.sw.network.DataAuthenticationService;
 import org.kth.cos.android.sw.network.UserAuthenticationService;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -61,6 +64,7 @@ public class RegisterUserActivity extends Activity {
 						if (responseStatus.getStatus() == Status.STATUS_SUCCESS) {
 							Profile profile = new Profile(email, pass);
 							profile.save(RegisterUserActivity.this);
+							responseStatus = new DataAuthenticationService().register(email, pass);
 							switchToSigninActivity();
 						} else {
 							Toast.makeText(getBaseContext(), responseStatus.getMessage(), Toast.LENGTH_LONG).show();
