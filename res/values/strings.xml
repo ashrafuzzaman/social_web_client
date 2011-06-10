@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, Welcome!</string>
-    <string name="app_name">SocialWebClient</string>
-    <string name="register_user_title">Register as new user</string>
-    <string name="email">email</string>
-    <string name="password">Password</string>
-    <string name="confirm_password">Confirm password</string>
-    <string name="register">Register</string>
-    <string name="cancel">Cancel</string>
-    <string name="testEmail">zmn.ashraf@gmail.com</string>
-    <string name="testPass">123456</string>
-    <string name="signin">Sign in</string>
-    <string name="signin_user_title">Sign in for existing user</string>
-    <string name="exit">Exit</string>
-    <string name="clear_cach">Clear cach</string>
-    <string name="friendsDatastore">Fetch friends Datastore</string>
+	<string name="hello">Hello World, Welcome!</string>
+	<string name="app_name">SocialWebClient</string>
+	<string name="register_user_title">Register as new user</string>
+	<string name="email">email</string>
+	<string name="password">Password</string>
+	<string name="confirm_password">Confirm password</string>
+	<string name="register">Register</string>
+	<string name="cancel">Cancel</string>
+	<string name="testEmail">zmn.ashraf@gmail.com</string>
+	<string name="testPass">123456</string>
+	<string name="signin">Sign in</string>
+	<string name="signin_user_title">Sign in for existing user</string>
+	<string name="exit">Exit</string>
+	<string name="clear_cach">Clear cach</string>
+	<string name="friendsDatastore">Fetch friends Datastore</string>
+	<string name="profileList">Profile List</string>
+	<string name="newProfile">New profile</string>
+	<string name="delete">Delete</string>
 </resources>

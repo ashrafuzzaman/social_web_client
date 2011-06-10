@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
-public class Profile {
+public class UserAccount {
 	private String email;
 	private String password;
 	private String authToken;
@@ -18,7 +18,7 @@ public class Profile {
 	public static final String DATA_AUTH_TOKEN = "DATA_AUTH_TOKEN";
 	public static final String DATA_STORE_SERVER = "DATA_STORE_SERVER";
 
-	public Profile() {
+	public UserAccount() {
 		this.email = "";
 		this.password = "";
 		this.authToken = "";
@@ -26,8 +26,7 @@ public class Profile {
 		this.dataStoreServer = "";
 	}
 
-	public Profile(String email, String password, String authToken,
-			String dataStoreServer) {
+	public UserAccount(String email, String password, String authToken, String dataStoreServer) {
 		super();
 		this.email = email;
 		this.password = password;
@@ -35,34 +34,40 @@ public class Profile {
 		this.dataStoreServer = dataStoreServer;
 	}
 
-	public Profile(String email, String password) {
+	public UserAccount(String email, String password) {
 		this.email = email;
 		this.password = password;
 	}
 
-	public Profile(String email, String password, String authToken) {
+	public UserAccount(String email, String password, String authToken) {
 		this.email = email;
 		this.password = password;
 		this.authToken = authToken;
 	}
+	
+	public UserAccount(String email, String password, String authToken, String dataAuthToken, String dataStoreServer) {
+		super();
+		this.email = email;
+		this.password = password;
+		this.authToken = authToken;
+		this.dataAuthToken = dataAuthToken;
+		this.dataStoreServer = dataStoreServer;
+	}
 
-	public static Profile getProfile(Activity currentActivity) {
-		SharedPreferences settings = currentActivity.getSharedPreferences(
-				PREFS_NAME, 0);
-		return new Profile(settings.getString(USER_EMAIL, ""), settings
-				.getString(USER_PASSWORD, ""), settings.getString(AUTH_TOKEN,
-				""));
+	public static UserAccount getAccount(Activity currentActivity) {
+		SharedPreferences settings = currentActivity.getSharedPreferences(PREFS_NAME, 0);
+		return new UserAccount(settings.getString(USER_EMAIL, ""), settings.getString(USER_PASSWORD, ""), settings.getString(AUTH_TOKEN, ""), settings.getString(DATA_AUTH_TOKEN, ""), settings.getString(DATA_STORE_SERVER, ""));
 	}
 
 	public boolean isSignedIn() {
-		return getAuthToken() != null && !getAuthToken().equals("");
+		return !TextUtils.isEmpty(email) && !TextUtils.isEmpty(authToken) && !TextUtils.isEmpty(dataAuthToken);
 	}
 
 	public boolean isUnregisteredUser() {
 		return email == null || email.equals("");
 	}
 
-	public void clearProfile(Activity currentActivity) {
+	public void clear(Activity currentActivity) {
 		email = "";
 		password = "";
 		authToken = "";
@@ -106,8 +111,17 @@ public class Profile {
 	}
 
 	public void save(Activity currentActivity) {
-		SharedPreferences settings = currentActivity.getSharedPreferences(
-				PREFS_NAME, 0);
+		SharedPreferences settings = currentActivity.getSharedPreferences(PREFS_NAME, 0);
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putString(USER_EMAIL, email);
+		editor.putString(USER_PASSWORD, password);
+		editor.putString(AUTH_TOKEN, authToken);
+		editor.putString(DATA_AUTH_TOKEN, dataAuthToken);
+		editor.commit();
+	}
+
+	public void update(Activity currentActivity) {
+		SharedPreferences settings = currentActivity.getSharedPreferences(PREFS_NAME, 0);
 		SharedPreferences.Editor editor = settings.edit();
 		if (!TextUtils.isEmpty(email))
 			editor.putString(USER_EMAIL, email);

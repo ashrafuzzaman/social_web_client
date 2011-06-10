@@ -6,7 +6,7 @@ import java.util.HashMap;
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.kth.cos.android.sw.data.Profile;
+import org.kth.cos.android.sw.data.UserAccount;
 import org.kth.cos.android.sw.data.Response;
 import org.kth.cos.android.sw.data.Status;
 
@@ -23,7 +23,7 @@ public abstract class AuthenticationService extends WebServiceBase {
 		params.put("password", password);
 		Response response = post("/api/users.json", params);
 		if (response.getStatus() == Status.STATUS_SUCCESS) {
-			response.setResponse(new Profile(email, password));
+			response.setResponse(new UserAccount(email, password));
 		}
 		return response;
 	}
@@ -36,7 +36,7 @@ public abstract class AuthenticationService extends WebServiceBase {
 		Response response = post("/api/sign_in.json", params);
 		if (response.getStatus() == Status.STATUS_SUCCESS) {
 			JSONObject json = response.getResponseJson().getJSONObject("user");
-			Profile profile = new Profile(json.getString("email"), password);
+			UserAccount profile = new UserAccount(json.getString("email"), password);
 			setAuthToken(profile, json.getString("authentication_token"));
 			response.setMessage("User Signed in");
 			response.setResponse(profile);
@@ -44,6 +44,6 @@ public abstract class AuthenticationService extends WebServiceBase {
 		return response;
 	}
 	
-	protected abstract void setAuthToken(Profile profile, String authToken);
+	protected abstract void setAuthToken(UserAccount profile, String authToken);
 
 }

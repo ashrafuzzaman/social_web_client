@@ -1,16 +1,15 @@
-package org.kth.cos.android.sw.activities;
+package org.kth.cos.android.sw;
 
 import java.io.IOException;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
-import org.kth.cos.android.sw.AccountHelper;
 import org.kth.cos.android.sw.R;
-import org.kth.cos.android.sw.Welcome;
 import org.kth.cos.android.sw.R.id;
 import org.kth.cos.android.sw.R.layout;
-import org.kth.cos.android.sw.data.Profile;
+import org.kth.cos.android.sw.data.UserAccount;
 import org.kth.cos.android.sw.data.Response;
+import org.kth.cos.android.sw.data.Status;
 import org.kth.cos.android.sw.network.DataAuthenticationService;
 import org.kth.cos.android.sw.network.UserAuthenticationService;
 
@@ -27,7 +26,7 @@ public class SigninUserActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.signin);
 
-		Profile profile = Profile.getProfile(this);
+		UserAccount profile = UserAccount.getAccount(this);
 		if (profile.isSignedIn()) {
 			switchToMainActivity();
 		} else {
@@ -63,12 +62,20 @@ public class SigninUserActivity extends BaseActivity {
 				String pass = ((TextView) findViewById(R.id.txtPass)).getText().toString();
 				try {
 					Response responseStatus = new UserAuthenticationService().signin(email, pass);
-					Profile profile = (Profile) responseStatus.getResponse();
-					profile.save(SigninUserActivity.this);
-					
-					responseStatus = new DataAuthenticationService().signin(email, pass);
-					profile = (Profile) responseStatus.getResponse();
-					profile.save(SigninUserActivity.this);
+					if (responseStatus.getStatus() == Status.STATUS_SUCCESS) {
+						UserAccount profile = (UserAccount) responseStatus.getResponse();
+						profile.save(SigninUserActivity.this);
+
+						responseStatus = new DataAuthenticationService().signin(email, pass);
+						if (responseStatus.getStatus() == Status.STATUS_SUCCESS) {
+							profile = (UserAccount) responseStatus.getResponse();
+							profile.update(SigninUserActivity.this);
+						} else {
+							showMessage(responseStatus.getMessage());
+						}
+					} else {
+						showMessage(responseStatus.getMessage());
+					}
 					switchToMainActivity();
 				} catch (ClientProtocolException e) {
 					showMessage("ClientProtocolException " + e.getStackTrace().toString());

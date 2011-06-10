@@ -1,4 +1,4 @@
-package org.kth.cos.android.sw.activities;
+package org.kth.cos.android.sw;
 
 import android.app.Activity;
 import android.app.AlertDialog;

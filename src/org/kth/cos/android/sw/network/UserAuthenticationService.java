@@ -1,17 +1,17 @@
 package org.kth.cos.android.sw.network;
 
-import org.kth.cos.android.sw.data.Profile;
+import org.kth.cos.android.sw.data.UserAccount;
 
 
 
 public class UserAuthenticationService extends AuthenticationService {
 
 	public UserAuthenticationService() {
-		super("http://social-web.heroku.com");
+		super(DataHosts.AUTH_SERVER);
 	}
 	
 	@Override
-	protected void setAuthToken(Profile profile, String authToken) {
+	protected void setAuthToken(UserAccount profile, String authToken) {
 		profile.setAuthToken(authToken);
 	}
 }

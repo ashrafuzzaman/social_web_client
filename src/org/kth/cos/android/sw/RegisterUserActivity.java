@@ -1,15 +1,13 @@
-package org.kth.cos.android.sw.activities;
+package org.kth.cos.android.sw;
 
 import java.io.IOException;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
-import org.kth.cos.android.sw.AccountHelper;
 import org.kth.cos.android.sw.R;
-import org.kth.cos.android.sw.Welcome;
 import org.kth.cos.android.sw.R.id;
 import org.kth.cos.android.sw.R.layout;
-import org.kth.cos.android.sw.data.Profile;
+import org.kth.cos.android.sw.data.UserAccount;
 import org.kth.cos.android.sw.data.Response;
 import org.kth.cos.android.sw.data.Status;
 import org.kth.cos.android.sw.network.DataAuthenticationService;
@@ -27,11 +25,16 @@ import android.widget.Toast;
 public class RegisterUserActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.register);
-		loadEmail();
-		attachBtnCancel();
-		attachBtnRegister();
+		try {
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.register);
+			loadEmail();
+			attachBtnCancel();
+			attachBtnRegister();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			Log.d("Error", "", e);
+		}
 	}
 
 	private void loadEmail() {
@@ -62,7 +65,7 @@ public class RegisterUserActivity extends Activity {
 					try {
 						Response responseStatus = new UserAuthenticationService().register(email, pass);
 						if (responseStatus.getStatus() == Status.STATUS_SUCCESS) {
-							Profile profile = new Profile(email, pass);
+							UserAccount profile = new UserAccount(email, pass);
 							profile.save(RegisterUserActivity.this);
 							responseStatus = new DataAuthenticationService().register(email, pass);
 							switchToSigninActivity();

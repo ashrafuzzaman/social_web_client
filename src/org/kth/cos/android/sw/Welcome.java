@@ -3,10 +3,7 @@ package org.kth.cos.android.sw;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.kth.cos.android.sw.activities.BaseActivity;
-import org.kth.cos.android.sw.activities.RegisterUserActivity;
-import org.kth.cos.android.sw.activities.SigninUserActivity;
-import org.kth.cos.android.sw.data.Profile;
+import org.kth.cos.android.sw.data.UserAccount;
 import org.kth.cos.android.sw.data.Response;
 import org.kth.cos.android.sw.network.DataServerService;
 
@@ -26,18 +23,21 @@ public class Welcome extends BaseActivity {
 	}
 
 	private void generateView() {
-		Profile profile = Profile.getProfile(this);
+		UserAccount profile = UserAccount.getAccount(this);
+		Log.i("INFO", String.format("Profile:: %s [%s]", profile.getEmail(), profile.getAuthToken()));
 		if (!profile.isSignedIn()) {
 			attachBtnRegister();
 			attachBtnSignin();
 			makeInvisible(R.id.btnClrCach);
 			makeInvisible(R.id.btnFrndDataStore);
+			makeInvisible(R.id.btnProfileList);
 		} else {
-			attachBtnClearCach(profile);
+			attachBtnClearCach();
+			attachBtnProfileList();
 			//attachBtnFriendsDatastore(profile);
 			makeInvisible(R.id.btnRegister);
 			makeInvisible(R.id.btnSignin);
-			showMessage("Signed in with token : " + profile.getAuthToken());
+			//showMessage("Signed in with token : " + profile.getAuthToken());
 		}
 
 		attachBtnExit();
@@ -53,13 +53,16 @@ public class Welcome extends BaseActivity {
 		});
 	}
 
-	private void attachBtnClearCach(final Profile profile) {
+	private void attachBtnClearCach() {
 		Button btnClrCach = (Button) findViewById(R.id.btnClrCach);
 		makeVisible(R.id.btnClrCach);
 		btnClrCach.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				showMessage("Clearing cach");
-				profile.clearProfile(Welcome.this);
+				//showMessage("Clearing cach");
+				UserAccount profile = UserAccount.getAccount(Welcome.this);
+				profile.clear(Welcome.this);
+				profile = UserAccount.getAccount(Welcome.this);
+				Log.i("INFO", String.format("Profile After clear:: %s [%s]", profile.getEmail(), profile.getAuthToken()));
 				generateView();
 			}
 		});
@@ -89,20 +92,33 @@ public class Welcome extends BaseActivity {
 		});
 	}
 
-	private void attachBtnFriendsDatastore(final Profile profile) {
+	private void attachBtnProfileList() {
+		Button btnProfileList = (Button) findViewById(R.id.btnProfileList);
+		makeVisible(R.id.btnProfileList);
+		btnProfileList.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				Intent myIntent = new Intent(Welcome.this, ProfileListActivity.class);
+				Welcome.this.startActivity(myIntent);
+				//Welcome.this.finish();
+			}
+		});
+	}
+
+	private void attachBtnFriendsDatastore(final UserAccount profile) {
 		Button btnFrndDataStore = (Button) findViewById(R.id.btnFrndDataStore);
 		makeVisible(R.id.btnExit);
 
 		final List<String> emails = new ArrayList<String>();
+		//TODO: Need to change this
 		emails.add("ashrafuzzaman.g2@gmail.com");
 		emails.add("test@test.com");
 		btnFrndDataStore.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				try {
-					Response response = new DataServerService().getDataServiceHost(profile.getEmail(), profile.getAuthToken(), emails);
+					Response response = new DataServerService(profile.getEmail(), profile.getAuthToken()).getDataServiceHost(emails);
 					StringBuffer resposeStr = new StringBuffer();
-					List<Profile> profiles = (List<Profile>) response.getResponse();
-					for (Profile profileObj : profiles) {
+					List<UserAccount> profiles = (List<UserAccount>) response.getResponse();
+					for (UserAccount profileObj : profiles) {
 						Log.i("FrndList", profileObj.getEmail());
 						resposeStr.append(profileObj.getEmail() + " " + profileObj.getDataStoreServer() + "\n");
 					}

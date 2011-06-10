@@ -9,20 +9,19 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.kth.cos.android.sw.data.Profile;
+import org.kth.cos.android.sw.data.UserAccount;
 import org.kth.cos.android.sw.data.Response;
 import org.kth.cos.android.sw.data.Status;
 
-public class DataServerService extends WebServiceBase {
+public class DataServerService extends AuthenticatedWebService {
 
-	public DataServerService() {
-		super("http://social-web.heroku.com");
+	public DataServerService(String email, String auth_token) {
+		super(DataHosts.AUTH_SERVER, email, auth_token);
 	}
 
-	public Response updateDataServiceHost(String email, String auth_token, String data_service_host) throws ClientProtocolException, IOException, JSONException {
+	public Response updateDataServiceHost(String data_service_host) throws ClientProtocolException, IOException, JSONException {
 		HashMap<String, String> params = new HashMap<String, String>();
-		params.put("email", email);
-		params.put("auth_token", auth_token);
+		putAuthHeader(params);
 		params.put("data_service_host", data_service_host);
 		Response response = post("/api/update_data_service_host.json", params);
 		if (response.getStatus() == Status.STATUS_SUCCESS) {
@@ -31,10 +30,9 @@ public class DataServerService extends WebServiceBase {
 		return response;
 	}
 
-	public Response getDataServiceHost(String myEmail, String auth_token, List<String> emails) throws ClientProtocolException, IOException, JSONException {
+	public Response getDataServiceHost(List<String> emails) throws ClientProtocolException, IOException, JSONException {
 		HashMap<String, String> params = new HashMap<String, String>();
-		params.put("email", myEmail);
-		params.put("auth_token", auth_token);
+		putAuthHeader(params);
 		params.put("emails", join(emails));
 		Response response = post("/api/data_service_hosts.json", params);
 		if (response.getStatus() == Status.STATUS_SUCCESS) {
@@ -56,12 +54,12 @@ public class DataServerService extends WebServiceBase {
 		return strEmails.toString();
 	}
 	
-	private List<Profile> createProfileList(JSONObject rootJsonObject) throws JSONException {
+	private List<UserAccount> createProfileList(JSONObject rootJsonObject) throws JSONException {
 		JSONArray userArray = rootJsonObject.getJSONArray("users");
-		List<Profile> profiles = new ArrayList<Profile>();
+		List<UserAccount> profiles = new ArrayList<UserAccount>();
 		for (int i = 0; i < userArray.length(); i++) {
 			JSONObject userObject = userArray.getJSONObject(i).getJSONObject("user");
-			profiles.add(new Profile(userObject.getString("email"), "", "", userObject.getString("data_service_host")));
+			profiles.add(new UserAccount(userObject.getString("email"), "", "", userObject.getString("data_service_host")));
 		}
 		return profiles;
 	}
