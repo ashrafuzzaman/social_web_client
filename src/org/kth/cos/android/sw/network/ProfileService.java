@@ -12,6 +12,8 @@ import org.json.JSONObject;
 import org.kth.cos.android.sw.data.Response;
 import org.kth.cos.android.sw.data.Status;
 
+import android.util.Log;
+
 public class ProfileService extends AuthenticatedWebService {
 
 	public ProfileService(String email, String auth_token) {
@@ -47,10 +49,11 @@ public class ProfileService extends AuthenticatedWebService {
 	public Response createProfile(String profileName) throws ClientProtocolException, IOException, JSONException {
 		HashMap<String, String> params = new HashMap<String, String>();
 		putAuthHeader(params);
-		params.put("name", profileName);
+		params.put("profile[name]", profileName);
+		Log.i("Profile create", "Creating Profile with :: " + profileName);
 		Response response = post("/profiles.json", params);
 		if (response.getStatus() == Status.STATUS_SUCCESS) {
-			response.setMessage("Profiles created");
+			response.setMessage("Profile [" + profileName + "] created");
 		}
 		return response;
 	}

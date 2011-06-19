@@ -4,17 +4,16 @@ import java.io.IOException;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
-import org.kth.cos.android.sw.R;
-import org.kth.cos.android.sw.R.id;
-import org.kth.cos.android.sw.R.layout;
-import org.kth.cos.android.sw.data.UserAccount;
 import org.kth.cos.android.sw.data.Response;
 import org.kth.cos.android.sw.data.Status;
+import org.kth.cos.android.sw.data.UserAccount;
 import org.kth.cos.android.sw.network.DataAuthenticationService;
 import org.kth.cos.android.sw.network.UserAuthenticationService;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,7 +21,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class RegisterUserActivity extends Activity {
+public class RegisterUserActivity extends BaseActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		try {
@@ -32,7 +31,6 @@ public class RegisterUserActivity extends Activity {
 			attachBtnCancel();
 			attachBtnRegister();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			Log.d("Error", "", e);
 		}
 	}
@@ -60,35 +58,37 @@ public class RegisterUserActivity extends Activity {
 				String pass = ((TextView) findViewById(R.id.txtPass)).getText().toString();
 				String confirmPass = ((TextView) findViewById(R.id.txtConfimPass)).getText().toString();
 				if (!pass.equals(confirmPass)) {
-					Toast.makeText(getBaseContext(), "Password does not match [" + pass + "] with [" + confirmPass + "]", Toast.LENGTH_LONG).show();
+					showMessage("Password does not match [" + pass + "] with [" + confirmPass + "]");
+					return;
 				} else {
-					try {
-						Response responseStatus = new UserAuthenticationService().register(email, pass);
-						if (responseStatus.getStatus() == Status.STATUS_SUCCESS) {
-							UserAccount profile = new UserAccount(email, pass);
-							profile.save(RegisterUserActivity.this);
-							responseStatus = new DataAuthenticationService().register(email, pass);
-							switchToSigninActivity();
-						} else {
-							Toast.makeText(getBaseContext(), responseStatus.getMessage(), Toast.LENGTH_LONG).show();
-						}
-					} catch (ClientProtocolException e) {
-						Toast.makeText(getBaseContext(), "ClientProtocolException " + e.getStackTrace().toString(), Toast.LENGTH_LONG).show();
-						e.printStackTrace();
-					} catch (IOException e) {
-						Toast.makeText(getBaseContext(), "IOException " + e.toString(), Toast.LENGTH_LONG).show();
-						e.printStackTrace();
-					} catch (JSONException e) {
-						Toast.makeText(getBaseContext(), e.toString(), Toast.LENGTH_LONG).show();
-						e.printStackTrace();
-					} catch (Exception e) {
-						// Toast.makeText(getBaseContext(), e.getMessage(),
-						// Toast.LENGTH_LONG).show();
-						Log.e("Register", e.getMessage(), e);
-					}
+					new RegisterAsyncTask(RegisterUserActivity.this, email, pass).execute();
+					// register(email, pass);
 				}
 			}
+
 		});
+	}
+
+	public void register(String email, String pass) {
+		try {
+			Response responseStatus = new UserAuthenticationService().register(email, pass);
+			if (responseStatus.getStatus() == Status.STATUS_SUCCESS) {
+				UserAccount profile = new UserAccount(email, pass);
+				profile.save(RegisterUserActivity.this);
+				responseStatus = new DataAuthenticationService().register(email, pass);
+				switchToSigninActivity();
+			} else {
+				Toast.makeText(getBaseContext(), responseStatus.getMessage(), Toast.LENGTH_LONG).show();
+			}
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			Log.e("Register", e.getMessage(), e);
+		}
 	}
 
 	private void switchToSigninActivity() {
@@ -97,4 +97,34 @@ public class RegisterUserActivity extends Activity {
 		RegisterUserActivity.this.finish();
 	}
 
+	class RegisterAsyncTask extends AsyncTask {
+		private ProgressDialog dialog;
+		protected RegisterUserActivity applicationContext;
+
+		String email;
+		String pass;
+
+		public RegisterAsyncTask(RegisterUserActivity applicationContext, String email, String pass) {
+			super();
+			this.applicationContext = applicationContext;
+			this.email = email;
+			this.pass = pass;
+		}
+
+		@Override
+		protected void onPreExecute() {
+			this.dialog = ProgressDialog.show(applicationContext, "Wait", "Registering ...", true);
+		}
+
+		@Override
+		protected Object doInBackground(Object... params) {
+			applicationContext.register(email, pass);
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Object result) {
+			this.dialog.cancel();
+		}
+	}
 }

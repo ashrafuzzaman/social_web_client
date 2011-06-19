@@ -17,5 +17,6 @@
 		<activity android:name=".SigninUserActivity" />
 		<activity android:name=".RegisterUserActivity" />
 		<activity android:name=".ProfileListActivity" />
+		<activity android:name=".AttributeListActivity" />
 	</application>
 </manifest>

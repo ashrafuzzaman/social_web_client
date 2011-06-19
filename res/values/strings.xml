@@ -9,7 +9,7 @@
 	<string name="register">Register</string>
 	<string name="cancel">Cancel</string>
 	<string name="testEmail">zmn.ashraf@gmail.com</string>
-	<string name="testPass">123456</string>
+	<string name="testPass"></string>
 	<string name="signin">Sign in</string>
 	<string name="signin_user_title">Sign in for existing user</string>
 	<string name="exit">Exit</string>

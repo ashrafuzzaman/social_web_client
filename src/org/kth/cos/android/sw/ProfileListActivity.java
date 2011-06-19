@@ -1,20 +1,20 @@
 package org.kth.cos.android.sw;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
 import org.kth.cos.android.sw.data.Response;
 import org.kth.cos.android.sw.data.Status;
 import org.kth.cos.android.sw.data.UserAccount;
 import org.kth.cos.android.sw.network.ProfileService;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ListActivity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -22,51 +22,51 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.SimpleAdapter;
 
 public class ProfileListActivity extends ListActivity {
-	private List<HashMap<String, String>> profileList;
+	ArrayList<HashMap<String, String>> profileList;
+	final Handler mHandler = new Handler();
+	Dialog progressDialog;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		generateProfileList();
+		startLoadingList();
 	}
 
-	protected void generateProfileList() {
-		ProfileService profileService = getProfileService();
+	private void generateList() {
+		UserAccount profile = UserAccount.getAccount(this);
+		ProfileService profileService = new ProfileService(profile.getEmail(), profile.getDataAuthToken());
 		try {
 			Response response = profileService.getProfileList();
 			if (response.getStatus() == Status.STATUS_SUCCESS) {
-				profileList = (List<HashMap<String, String>>) (response.getResponse());
-				//this.setListAdapter(new ArrayAdapter<String>(this, R.layout.profile_rowlayout, R.id.label, profileList));
-
-				SimpleAdapter mSchedule = new SimpleAdapter(this, profileList, R.layout.profile_rowlayout, 
-						new String[] { "name" }, new int[] { R.id.txtProfileName});
-				this.setListAdapter(mSchedule);
-				
-				registerForContextMenu(getListView());
-			} else {
-				showMessage(response.getMessage());
+				profileList = (ArrayList<HashMap<String, String>>) (response.getResponse());
 			}
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	protected ProfileService getProfileService() {
-		UserAccount profile = UserAccount.getAccount(this);
-		ProfileService profileService = new ProfileService(profile.getEmail(), profile.getDataAuthToken());
-		return profileService;
+	private void saveNewProfile(String profileName) {
+		ProfileService profileService = getProfileService();
+		try {
+			Response response = profileService.createProfile(profileName);
+			if (response.getStatus() == Status.STATUS_SUCCESS) {
+				startLoadingList();
+			}
+			showMessage(response.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void updateProfileListInUI() {
+		SimpleAdapter mSchedule1 = new SimpleAdapter(this, profileList, R.layout.profile_rowlayout, new String[] { "name" }, new int[] { R.id.txtProfileName });
+		this.setListAdapter(mSchedule1);
+		registerForContextMenu(getListView());
+		this.progressDialog.dismiss();
 	}
 
 	@Override
@@ -93,18 +93,13 @@ public class ProfileListActivity extends ListActivity {
 			try {
 				response = profileService.deleteProfile(profileId);
 				if (response.getStatus() == Status.STATUS_SUCCESS) {
-					generateProfileList();
+					startLoadingList();
 				}
 				showMessage(response.getMessage());
-			} catch (ClientProtocolException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		} else {
-			showMessage("Other");
 			return false;
 		}
 		return true;
@@ -112,7 +107,6 @@ public class ProfileListActivity extends ListActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle item selection
 		switch (item.getItemId()) {
 		case R.id.new_profile:
 			attachNewProfileMenuAction();
@@ -127,28 +121,19 @@ public class ProfileListActivity extends ListActivity {
 		alert.setTitle("New Profile");
 		alert.setMessage("Type the name of the new profile");
 		final EditText input = new EditText(this);
+		alert.setView(input);
 
 		alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
-				String prfileName = input.getText().toString();
-				showMessage(prfileName);
-				ProfileService profileService = getProfileService();
-				try {
-					Response response = profileService.createProfile(prfileName);
-					if (response.getStatus() == Status.STATUS_SUCCESS) {
-						generateProfileList();
+				progressDialog = ProgressDialog.show(ProfileListActivity.this, "Wait", "Creating new profile...", true);
+				new Thread(new Runnable() {					
+					public void run() {
+						String profileName = input.getText().toString();
+						saveNewProfile(profileName);
+						progressDialog.dismiss();
+						//startLoadingList();
 					}
-					showMessage(response.getMessage());
-				} catch (ClientProtocolException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				}).start();
 			}
 		});
 
@@ -156,14 +141,39 @@ public class ProfileListActivity extends ListActivity {
 			public void onClick(DialogInterface dialog, int whichButton) {
 			}
 		});
-
 		alert.show();
 	}
 
+	final Runnable resultUpdater = new Runnable() {
+		public void run() {
+			updateProfileListInUI();
+		}
+	};
+
+	protected void startLoadingList() {
+		this.progressDialog = ProgressDialog.show(ProfileListActivity.this, "Wait", "Loading profile list...", true);
+		Thread t = new Thread() {
+			public void run() {
+				generateList();
+				mHandler.post(resultUpdater);
+			}
+		};
+		t.start();
+	}
+
+	private ProfileService getProfileService() {
+		UserAccount profile = UserAccount.getAccount(this);
+		ProfileService profileService = new ProfileService(profile.getEmail(), profile.getDataAuthToken());
+		return profileService;
+	}
+
 	protected void showMessage(String message) {
-		// Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setMessage(message);
+		builder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+			}
+		});
 		AlertDialog alert = builder.create();
 		alert.show();
 	}
