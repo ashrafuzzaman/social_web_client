@@ -13,6 +13,7 @@ import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.ContextMenu;
@@ -23,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 public class ProfileListActivity extends ListActivity {
@@ -33,6 +35,7 @@ public class ProfileListActivity extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setTitle("Profile list");
 		startLoadingList();
 	}
 
@@ -67,6 +70,16 @@ public class ProfileListActivity extends ListActivity {
 		this.setListAdapter(mSchedule1);
 		registerForContextMenu(getListView());
 		this.progressDialog.dismiss();
+	}
+
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		super.onListItemClick(l, v, position, id);
+		HashMap<String, String> profile = profileList.get(position);
+		Intent attributeActIntent = new Intent(ProfileListActivity.this, AttributeListActivity.class);
+		attributeActIntent.putExtra("name", profile.get("name"));
+		attributeActIntent.putExtra("id", profile.get("id"));
+		ProfileListActivity.this.startActivity(attributeActIntent);
 	}
 
 	@Override
@@ -126,12 +139,12 @@ public class ProfileListActivity extends ListActivity {
 		alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				progressDialog = ProgressDialog.show(ProfileListActivity.this, "Wait", "Creating new profile...", true);
-				new Thread(new Runnable() {					
+				new Thread(new Runnable() {
 					public void run() {
 						String profileName = input.getText().toString();
 						saveNewProfile(profileName);
 						progressDialog.dismiss();
-						//startLoadingList();
+						startLoadingList();
 					}
 				}).start();
 			}

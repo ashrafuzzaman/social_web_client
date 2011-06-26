@@ -19,25 +19,26 @@ public class Welcome extends BaseActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		setTitle("Welcome");
 		generateView();
 	}
 
 	private void generateView() {
 		UserAccount profile = UserAccount.getAccount(this);
 		Log.i("INFO", String.format("Profile:: %s [%s]", profile.getEmail(), profile.getAuthToken()));
+		makeInvisible(R.id.btnClrCach);
+		makeInvisible(R.id.btnFrndDataStore);
 		if (!profile.isSignedIn()) {
 			attachBtnRegister();
 			attachBtnSignin();
-			makeInvisible(R.id.btnClrCach);
-			makeInvisible(R.id.btnFrndDataStore);
 			makeInvisible(R.id.btnProfileList);
 		} else {
-			attachBtnClearCach();
+			// attachBtnClearCach();
 			attachBtnProfileList();
-			//attachBtnFriendsDatastore(profile);
+			// attachBtnFriendsDatastore(profile);
 			makeInvisible(R.id.btnRegister);
 			makeInvisible(R.id.btnSignin);
-			//showMessage("Signed in with token : " + profile.getAuthToken());
+			// showMessage("Signed in with token : " + profile.getAuthToken());
 		}
 
 		attachBtnExit();
@@ -58,7 +59,7 @@ public class Welcome extends BaseActivity {
 		makeVisible(R.id.btnClrCach);
 		btnClrCach.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				//showMessage("Clearing cach");
+				// showMessage("Clearing cach");
 				UserAccount profile = UserAccount.getAccount(Welcome.this);
 				profile.clear(Welcome.this);
 				profile = UserAccount.getAccount(Welcome.this);
@@ -99,7 +100,7 @@ public class Welcome extends BaseActivity {
 			public void onClick(View v) {
 				Intent myIntent = new Intent(Welcome.this, ProfileListActivity.class);
 				Welcome.this.startActivity(myIntent);
-				//Welcome.this.finish();
+				// Welcome.this.finish();
 			}
 		});
 	}
@@ -109,7 +110,7 @@ public class Welcome extends BaseActivity {
 		makeVisible(R.id.btnExit);
 
 		final List<String> emails = new ArrayList<String>();
-		//TODO: Need to change this
+		// TODO: Need to change this
 		emails.add("ashrafuzzaman.g2@gmail.com");
 		emails.add("test@test.com");
 		btnFrndDataStore.setOnClickListener(new View.OnClickListener() {

@@ -14,20 +14,20 @@ import org.kth.cos.android.sw.data.Status;
 
 import android.util.Log;
 
-public class ProfileService extends AuthenticatedWebService {
+public class AttributeService extends AuthenticatedWebService {
 
-	public ProfileService(String email, String auth_token) {
+	public AttributeService(String email, String auth_token) {
 		super(DataHosts.DATA_SERVER, email, auth_token);
 	}
 	
-	//http://192.168.0.10:3001/profiles.json?email=ashrafuzzaman.g2@gmail.com&auth_token=uUKDt0bGxyOTGbUwxWne
-	public Response getProfileList() throws ClientProtocolException, IOException, JSONException {
+	//http://localhost:3000/profiles/3/all_attributes.json?email=ashrafuzzaman.g2@gmail.com&auth_token=7w38pGIRZ1cS1fpVpP9C
+	public Response getAttributeList(int profileId) throws ClientProtocolException, IOException, JSONException {
 		HashMap<String, String> params = new HashMap<String, String>();
 		putAuthHeader(params);
-		Response response = get("/profiles.json", params);
+		Response response = get("/profiles/" + profileId +"/all_attributes.json", params);
 		if (response.getStatus() == Status.STATUS_SUCCESS) {
 			response.setMessage("Profiles found");
-			response.setResponse(createList(response.getResponseJson(), "profiles", "profile", new String[] {"id", "name"}));
+			response.setResponse(createList(response.getResponseJson(), "profile_attributes", "profile_attribute", new String[] {"id", "name", "value", "attribute_type", "selected"}));
 		}
 		return response;
 	}

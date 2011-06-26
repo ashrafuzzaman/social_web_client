@@ -18,7 +18,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.HttpParams;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.kth.cos.android.sw.data.Response;
@@ -115,6 +115,20 @@ public class WebServiceBase {
 	protected void putAuthHeader(HashMap<String, String> params, String email, String auth_token) {
 		params.put("email", email);
 		params.put("auth_token", auth_token);
+	}
+	
+	final protected List<HashMap<String, String>> createList(JSONObject rootJsonObject, String rootElement, String eachRoot, String []properties) throws JSONException {
+		JSONArray resourceArray = rootJsonObject.getJSONArray(rootElement);
+		List<HashMap<String, String>> resources = new ArrayList<HashMap<String,String>>();
+		for (int i = 0; i < resourceArray.length(); i++) {
+			JSONObject resourceObject = resourceArray.getJSONObject(i).getJSONObject(eachRoot);
+			HashMap<String, String> resourceMap = new HashMap<String, String>();
+			for (String property: properties) {
+				resourceMap.put(property, resourceObject.getString(property));
+			}
+			resources.add(resourceMap);
+		}
+		return resources;
 	}
 
 }
