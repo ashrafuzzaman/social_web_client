@@ -1,25 +1,23 @@
 package org.kth.cos.android.sw;
 
-import java.io.IOException;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
 import org.kth.cos.android.sw.data.Response;
 import org.kth.cos.android.sw.data.Status;
 import org.kth.cos.android.sw.data.UserAccount;
 import org.kth.cos.android.sw.network.DataAuthenticationService;
 import org.kth.cos.android.sw.network.UserAuthenticationService;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 public class SigninUserActivity extends BaseActivity {
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -54,10 +52,11 @@ public class SigninUserActivity extends BaseActivity {
 	}
 
 	public void signin() {
-		String email = ((TextView) findViewById(R.id.txtEmail)).getText().toString();
-		String pass = ((TextView) findViewById(R.id.txtPass)).getText().toString();
+		final String email = ((TextView) findViewById(R.id.txtEmail)).getText().toString();
+		final String pass = ((TextView) findViewById(R.id.txtPass)).getText().toString();
+		Response responseStatus;
 		try {
-			Response responseStatus = new UserAuthenticationService().signin(email, pass);
+			responseStatus = new UserAuthenticationService().signin(email, pass);
 			if (responseStatus.getStatus() == Status.STATUS_SUCCESS) {
 				UserAccount profile = (UserAccount) responseStatus.getResponse();
 				profile.save(SigninUserActivity.this);
@@ -66,21 +65,14 @@ public class SigninUserActivity extends BaseActivity {
 				if (responseStatus.getStatus() == Status.STATUS_SUCCESS) {
 					profile = (UserAccount) responseStatus.getResponse();
 					profile.update(SigninUserActivity.this);
+					switchToMainActivity();
 				} else {
 					showMessage(responseStatus.getMessage());
 				}
 			} else {
 				showMessage(responseStatus.getMessage());
 			}
-			switchToMainActivity();
-		} catch (ClientProtocolException e) {
-			showMessage("ClientProtocolException " + e.getStackTrace().toString());
-			e.printStackTrace();
-		} catch (IOException e) {
-			showMessage("IOException " + e.getStackTrace().toString());
-			e.printStackTrace();
-		} catch (JSONException e) {
-			showMessage("JSONException " + e.getStackTrace().toString());
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -89,32 +81,8 @@ public class SigninUserActivity extends BaseActivity {
 		Button button = (Button) findViewById(R.id.btnSignin);
 		button.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				SigninAsyncTask task = new SigninAsyncTask();
-				task.applicationContext = SigninUserActivity.this;
-				task.execute();
+				signin();
 			}
-
 		});
-	}
-
-	class SigninAsyncTask extends AsyncTask {
-		private ProgressDialog dialog;
-		protected SigninUserActivity applicationContext;
-
-		@Override
-		protected void onPreExecute() {
-			this.dialog = ProgressDialog.show(applicationContext, "Wait", "Signing ...", true);
-		}
-
-		@Override
-		protected Object doInBackground(Object... params) {
-			applicationContext.signin();
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(Object result) {
-			this.dialog.cancel();
-		}
 	}
 }

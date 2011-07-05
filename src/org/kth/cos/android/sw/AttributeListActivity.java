@@ -2,34 +2,34 @@ package org.kth.cos.android.sw;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.kth.cos.android.sw.data.Response;
 import org.kth.cos.android.sw.data.Status;
 import org.kth.cos.android.sw.data.UserAccount;
 import org.kth.cos.android.sw.network.AttributeService;
-import org.kth.cos.android.sw.network.ProfileService;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.TextView;
 
 public class AttributeListActivity extends ListActivity {
-	ArrayList<HashMap<String, String>> profileList;
+	ArrayList<HashMap<String, String>> attributeList;
 	final Handler mHandler = new Handler();
 	Dialog progressDialog;
 	private int profileId;
@@ -40,139 +40,75 @@ public class AttributeListActivity extends ListActivity {
 		setTitle("Attribute list");
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
-			String id = extras.getString("id");
-			showMessage(id);
-			profileId = Integer.parseInt(id);
+			profileId = Integer.parseInt(extras.getString("id"));
+			startLoadingList();
 		}
-		startLoadingList();
 	}
 
 	private void generateList() {
-		UserAccount profile = UserAccount.getAccount(this);
-		AttributeService profileService = new AttributeService(profile.getEmail(), profile.getDataAuthToken());
+		AttributeService attributeService = getAttributeService();
 		try {
-			Response response = profileService.getAttributeList(profileId);
+			Response response = attributeService.getAttributeList(profileId);
 			if (response.getStatus() == Status.STATUS_SUCCESS) {
-				profileList = (ArrayList<HashMap<String, String>>) (response.getResponse());
+				attributeList = (ArrayList<HashMap<String, String>>) (response.getResponse());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void saveNewProfile(String profileName) {
-		ProfileService profileService = getProfileService();
-		try {
-			Response response = profileService.createProfile(profileName);
-			if (response.getStatus() == Status.STATUS_SUCCESS) {
-				startLoadingList();
-			}
-			showMessage(response.getMessage());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void updateProfileListInUI() {
-		SimpleAdapter mSchedule1 = new SimpleAdapter(this, profileList, R.layout.profile_rowlayout, new String[] { "name" }, new int[] { R.id.txtProfileName });
-		this.setListAdapter(mSchedule1);
-		registerForContextMenu(getListView());
-		this.progressDialog.dismiss();
-	}
-
-	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		super.onListItemClick(l, v, position, id);
-		HashMap<String, String> profile = profileList.get(position);
-		Intent attributeActIntent = new Intent(AttributeListActivity.this, AttributeListActivity.class);
-		attributeActIntent.putExtra("name", profile.get("name"));
-		attributeActIntent.putExtra("id", profile.get("id"));
-		AttributeListActivity.this.startActivity(attributeActIntent);
+	private AttributeService getAttributeService() {
+		UserAccount account = UserAccount.getAccount(this);
+		AttributeService attributeService = new AttributeService(account.getEmail(), account.getDataAuthToken());
+		return attributeService;
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.layout.profile_menu, menu);
-		return true;
-	}
-
-	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, v, menuInfo);
-		menu.setHeaderTitle("Profile action");
-		menu.add(0, v.getId(), 0, "Delete");
-	}
-
-	@Override
-	public boolean onContextItemSelected(MenuItem item) {
-		AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) item.getMenuInfo();
-		if (item.getTitle() == "Delete") {
-			int profileId = Integer.parseInt(profileList.get(menuInfo.position).get("id"));
-			ProfileService profileService = getProfileService();
-			Response response;
-			try {
-				response = profileService.deleteProfile(profileId);
-				if (response.getStatus() == Status.STATUS_SUCCESS) {
-					startLoadingList();
-				}
-				showMessage(response.getMessage());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		} else {
-			return false;
-		}
+		inflater.inflate(R.layout.attribute_menu, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.new_profile:
-			attachNewProfileMenuAction();
+		case R.id.save_attributes:
+			showMessage("save");
+			AttributeService attributeService = getAttributeService();
+			List<String> ids = new ArrayList<String>();
+			for (HashMap<String, String> attr : attributeList) {
+				if (attr.get("selected").equals("true")) {
+					ids.add(attr.get("id"));
+				}
+				Log.i("Selected", attr.get("id") + attr.get("name") + " : " + attr.get("selected"));
+			}
+			try {
+				attributeService.updateAttributeList(profileId, ids);
+				startLoadingList();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
 
-	protected void attachNewProfileMenuAction() {
-		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		alert.setTitle("New Profile");
-		alert.setMessage("Type the name of the new profile");
-		final EditText input = new EditText(this);
-		alert.setView(input);
-
-		alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
-				progressDialog = ProgressDialog.show(AttributeListActivity.this, "Wait", "Creating new profile...", true);
-				new Thread(new Runnable() {
-					public void run() {
-						String profileName = input.getText().toString();
-						saveNewProfile(profileName);
-						progressDialog.dismiss();
-						startLoadingList();
-					}
-				}).start();
-			}
-		});
-
-		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
-			}
-		});
-		alert.show();
+	private void updateAttributeListInUI() {
+		this.setListAdapter(new AttributeListAdapter(this, attributeList));
+		registerForContextMenu(getListView());
+		this.progressDialog.dismiss();
 	}
 
 	final Runnable resultUpdater = new Runnable() {
 		public void run() {
-			updateProfileListInUI();
+			updateAttributeListInUI();
 		}
 	};
 
 	protected void startLoadingList() {
-		this.progressDialog = ProgressDialog.show(AttributeListActivity.this, "Wait", "Loading profile list...", true);
+		this.progressDialog = ProgressDialog.show(AttributeListActivity.this, "Wait", "Loading attributes...", true);
 		Thread t = new Thread() {
 			public void run() {
 				generateList();
@@ -180,12 +116,6 @@ public class AttributeListActivity extends ListActivity {
 			}
 		};
 		t.start();
-	}
-
-	private ProfileService getProfileService() {
-		UserAccount profile = UserAccount.getAccount(this);
-		ProfileService profileService = new ProfileService(profile.getEmail(), profile.getDataAuthToken());
-		return profileService;
 	}
 
 	protected void showMessage(String message) {
@@ -197,5 +127,41 @@ public class AttributeListActivity extends ListActivity {
 		});
 		AlertDialog alert = builder.create();
 		alert.show();
+	}
+
+	class AttributeListAdapter extends ArrayAdapter<HashMap<String, String>> {
+
+		public AttributeListAdapter(Context context, List<HashMap<String, String>> objects) {
+			super(context, R.id.txtAttributeName, objects);
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			View v = convertView;
+			if (v == null) {
+				LayoutInflater vi = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				v = vi.inflate(R.layout.attribute_rowlayout, null);
+			}
+			final HashMap<String, String> attributeMap = getItem(position);
+			if (attributeMap != null) {
+				TextView txtName = (TextView) v.findViewById(R.id.txtAttributeName);
+				txtName.setText(attributeMap.get("name"));
+				txtName.setOnClickListener(new View.OnClickListener() {
+					public void onClick(View v) {
+						showMessage(attributeMap.get("value"));
+					}
+				});
+
+				CheckBox chkSelect = (CheckBox) v.findViewById(R.id.chkChecked);
+				chkSelect.setChecked(Boolean.parseBoolean(attributeMap.get("selected")));
+				chkSelect.setOnClickListener(new View.OnClickListener() {
+					public void onClick(View v) {
+						attributeMap.put("selected", attributeMap.get("selected").equals("true") ? "false" : "true");
+					}
+				});
+			}
+			return v;
+		}
+
 	}
 }

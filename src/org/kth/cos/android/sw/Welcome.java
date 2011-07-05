@@ -33,7 +33,7 @@ public class Welcome extends BaseActivity {
 			attachBtnSignin();
 			makeInvisible(R.id.btnProfileList);
 		} else {
-			// attachBtnClearCach();
+			attachBtnClearCach();
 			attachBtnProfileList();
 			// attachBtnFriendsDatastore(profile);
 			makeInvisible(R.id.btnRegister);

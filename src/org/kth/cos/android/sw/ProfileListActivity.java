@@ -16,6 +16,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -58,8 +59,9 @@ public class ProfileListActivity extends ListActivity {
 			Response response = profileService.createProfile(profileName);
 			if (response.getStatus() == Status.STATUS_SUCCESS) {
 				startLoadingList();
+			} else {
+				showMessage(response.getMessage());
 			}
-			showMessage(response.getMessage());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -69,7 +71,7 @@ public class ProfileListActivity extends ListActivity {
 		SimpleAdapter mSchedule1 = new SimpleAdapter(this, profileList, R.layout.profile_rowlayout, new String[] { "name" }, new int[] { R.id.txtProfileName });
 		this.setListAdapter(mSchedule1);
 		registerForContextMenu(getListView());
-		this.progressDialog.dismiss();
+		progressDialog.dismiss();
 	}
 
 	@Override
@@ -134,17 +136,22 @@ public class ProfileListActivity extends ListActivity {
 		alert.setTitle("New Profile");
 		alert.setMessage("Type the name of the new profile");
 		final EditText input = new EditText(this);
+		input.setSingleLine();
 		alert.setView(input);
 
 		alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
-				progressDialog = ProgressDialog.show(ProfileListActivity.this, "Wait", "Creating new profile...", true);
+				// progressDialog =
+				// ProgressDialog.show(ProfileListActivity.this, "Wait",
+				// "Creating new profile...", true);
 				new Thread(new Runnable() {
 					public void run() {
+						Looper.prepare();
 						String profileName = input.getText().toString();
 						saveNewProfile(profileName);
-						progressDialog.dismiss();
-						startLoadingList();
+						// progressDialog.dismiss();
+						//startLoadingList();
+						Looper.loop();
 					}
 				}).start();
 			}
@@ -164,11 +171,13 @@ public class ProfileListActivity extends ListActivity {
 	};
 
 	protected void startLoadingList() {
-		this.progressDialog = ProgressDialog.show(ProfileListActivity.this, "Wait", "Loading profile list...", true);
+		progressDialog = ProgressDialog.show(ProfileListActivity.this, "Wait", "Loading profile list...", true);
 		Thread t = new Thread() {
 			public void run() {
+				Looper.prepare();
 				generateList();
 				mHandler.post(resultUpdater);
+				Looper.loop();
 			}
 		};
 		t.start();

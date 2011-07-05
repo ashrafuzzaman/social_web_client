@@ -18,4 +18,5 @@
 	<string name="profileList">Profile List</string>
 	<string name="newProfile">New profile</string>
 	<string name="delete">Delete</string>
+	<string name="save">Save</string>
 </resources>
