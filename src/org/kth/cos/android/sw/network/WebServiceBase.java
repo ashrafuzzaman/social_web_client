@@ -16,6 +16,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
@@ -34,7 +35,7 @@ public class WebServiceBase {
 		this.baseUrl = baseUrl;
 	}
 
-	public Response post(String path, HashMap<String, String> params) throws ClientProtocolException, IOException, JSONException {
+	protected Response post(String path, HashMap<String, String> params) throws ClientProtocolException, IOException, JSONException {
 		HttpClient httpclient = new DefaultHttpClient();
 		HttpPost httpPost = createHttpPost(baseUrl + path, params);
 		HttpResponse response = httpclient.execute(httpPost);
@@ -47,7 +48,20 @@ public class WebServiceBase {
 		}
 	}
 
-	public Response get(String path, HashMap<String, String> params) throws ClientProtocolException, IOException, JSONException {
+	protected Response put(String path, HashMap<String, String> params) throws ClientProtocolException, IOException, JSONException {
+		HttpClient httpclient = new DefaultHttpClient();
+		HttpPut httpPost = createHttpPut(baseUrl + path, params);
+		HttpResponse response = httpclient.execute(httpPost);
+
+		JSONObject rootJson = getJsonResponse(response);
+		if (rootJson.has(ERROR_ROOT)) {
+			return new Response(Status.STATUS_ERROR, rootJson.getString(ERROR_ROOT));
+		} else {
+			return new Response(Status.STATUS_SUCCESS, rootJson);
+		}
+	}
+
+	protected Response get(String path, HashMap<String, String> params) throws ClientProtocolException, IOException, JSONException {
 		HttpClient httpclient = new DefaultHttpClient();
 		HttpGet httpGet = createHttpGet(baseUrl + path, params);
 		HttpResponse response = httpclient.execute(httpGet);
@@ -60,7 +74,7 @@ public class WebServiceBase {
 		}
 	}
 
-	public Response delete(String path, HashMap<String, String> params) throws ClientProtocolException, IOException, JSONException {
+	protected Response delete(String path, HashMap<String, String> params) throws ClientProtocolException, IOException, JSONException {
 		HttpClient httpclient = new DefaultHttpClient();
 		HttpDelete httpDelete = createHttpDelete(baseUrl + path, params);
 		HttpResponse response = httpclient.execute(httpDelete);
@@ -81,6 +95,16 @@ public class WebServiceBase {
 		}
 		httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 		return httpPost;
+	}
+
+	private HttpPut createHttpPut(String url, HashMap<String, String> params) throws UnsupportedEncodingException {
+		HttpPut httpPut = new HttpPut(url);
+		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+		for (Entry<String, String> param : params.entrySet()) {
+			nameValuePairs.add(new BasicNameValuePair(param.getKey(), param.getValue()));
+		}
+		httpPut.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+		return httpPut;
 	}
 
 	private HttpGet createHttpGet(String url, HashMap<String, String> params) throws UnsupportedEncodingException {

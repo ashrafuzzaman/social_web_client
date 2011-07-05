@@ -42,6 +42,17 @@ public class AttributeService extends AuthenticatedWebService {
 		return response;
 	}
 	
+	public Response updateAttributeValue(int attrId, String value) throws ClientProtocolException, IOException, JSONException {
+		HashMap<String, String> params = new HashMap<String, String>();
+		putAuthHeader(params);
+		params.put("profile_attribute[value]", value);
+		Response response = put("/profile_attributes/" + attrId +".json", params);
+		if (response.getStatus() == Status.STATUS_SUCCESS) {
+			response.setMessage("Value updated");
+		}
+		return response;
+	}
+	
 	public static String join(List<String> ids, String separator) {
 	    StringBuffer sb = new StringBuffer();
 	    for (int i=0; i < ids.size(); i++) {

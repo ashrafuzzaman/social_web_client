@@ -1,9 +1,12 @@
 package org.kth.cos.android.sw;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
 import org.kth.cos.android.sw.data.Response;
 import org.kth.cos.android.sw.data.Status;
 import org.kth.cos.android.sw.data.UserAccount;
@@ -148,7 +151,14 @@ public class AttributeListActivity extends ListActivity {
 				txtName.setText(attributeMap.get("name"));
 				txtName.setOnClickListener(new View.OnClickListener() {
 					public void onClick(View v) {
-						showMessage(attributeMap.get("value"));
+						AttributeService attributeService = getAttributeService();
+						try {
+							attributeService.updateAttributeValue(Integer.parseInt(attributeMap.get("id")), attributeMap.get("value"));
+							startLoadingList();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						//showMessage(attributeMap.get("value"));
 					}
 				});
 
