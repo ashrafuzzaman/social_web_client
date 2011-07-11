@@ -19,4 +19,6 @@
 	<string name="newProfile">New profile</string>
 	<string name="delete">Delete</string>
 	<string name="save">Save</string>
+	<string name="name">name</string>
+	<string name="value">value</string>
 </resources>

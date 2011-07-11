@@ -122,7 +122,7 @@ public class WebServiceBase {
 	private JSONObject getJsonResponse(HttpResponse response) throws IOException, JSONException {
 		ByteArrayOutputStream ostream = new ByteArrayOutputStream();
 		response.getEntity().writeTo(ostream);
-		Log.d("Json Response", ostream.toString());
+		Log.i("Json Response", ostream.toString());
 		return new JSONObject(ostream.toString());
 	}
 
@@ -145,14 +145,19 @@ public class WebServiceBase {
 		JSONArray resourceArray = rootJsonObject.getJSONArray(rootElement);
 		List<HashMap<String, String>> resources = new ArrayList<HashMap<String,String>>();
 		for (int i = 0; i < resourceArray.length(); i++) {
-			JSONObject resourceObject = resourceArray.getJSONObject(i).getJSONObject(eachRoot);
-			HashMap<String, String> resourceMap = new HashMap<String, String>();
-			for (String property: properties) {
-				resourceMap.put(property, resourceObject.getString(property));
-			}
+			HashMap<String, String> resourceMap = createMap(resourceArray.getJSONObject(i), eachRoot, properties);
 			resources.add(resourceMap);
 		}
 		return resources;
+	}
+
+	protected HashMap<String, String> createMap(JSONObject object, String elementRoot, String[] properties) throws JSONException {
+		JSONObject resourceObject = object.getJSONObject(elementRoot);
+		HashMap<String, String> resourceMap = new HashMap<String, String>();
+		for (String property: properties) {
+			resourceMap.put(property, resourceObject.getString(property));
+		}
+		return resourceMap;
 	}
 
 }

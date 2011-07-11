@@ -3,11 +3,13 @@ package org.kth.cos.android.sw;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.kth.cos.android.sw.data.UserAccount;
 import org.kth.cos.android.sw.data.Response;
+import org.kth.cos.android.sw.data.UserAccount;
 import org.kth.cos.android.sw.network.DataServerService;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -33,7 +35,7 @@ public class Welcome extends BaseActivity {
 			attachBtnSignin();
 			makeInvisible(R.id.btnProfileList);
 		} else {
-			attachBtnClearCach();
+			// attachBtnClearCach();
 			attachBtnProfileList();
 			// attachBtnFriendsDatastore(profile);
 			makeInvisible(R.id.btnRegister);
@@ -118,6 +120,7 @@ public class Welcome extends BaseActivity {
 				try {
 					Response response = new DataServerService(profile.getEmail(), profile.getAuthToken()).getDataServiceHost(emails);
 					StringBuffer resposeStr = new StringBuffer();
+					@SuppressWarnings("unchecked")
 					List<UserAccount> profiles = (List<UserAccount>) response.getResponse();
 					for (UserAccount profileObj : profiles) {
 						Log.i("FrndList", profileObj.getEmail());
@@ -131,6 +134,12 @@ public class Welcome extends BaseActivity {
 				}
 			}
 		});
+	}
+
+	private boolean isOnline() {
+		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		return cm.getActiveNetworkInfo().isConnectedOrConnecting();
+
 	}
 
 }

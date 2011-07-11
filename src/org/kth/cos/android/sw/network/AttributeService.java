@@ -3,13 +3,12 @@ package org.kth.cos.android.sw.network;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.kth.cos.android.sw.data.Response;
 import org.kth.cos.android.sw.data.Status;
-
-import android.util.Log;
 
 public class AttributeService extends AuthenticatedWebService {
 
@@ -49,6 +48,22 @@ public class AttributeService extends AuthenticatedWebService {
 		Response response = put("/profile_attributes/" + attrId +".json", params);
 		if (response.getStatus() == Status.STATUS_SUCCESS) {
 			response.setMessage("Value updated");
+		}
+		return response;
+	}
+	
+	public Response createAttribute(int profileId, String name, String value) throws ClientProtocolException, IOException, JSONException {
+		HashMap<String, String> params = new HashMap<String, String>();
+		putAuthHeader(params);
+		params.put("profile_id", Integer.toString(profileId));
+		params.put("profile_attribute[name]", name);
+		params.put("profile_attribute[value]", value);
+		Response response = post("/profile_attributes.json", params);
+		if (response.getStatus() == Status.STATUS_SUCCESS) {
+			response.setMessage("Attribute created");
+			Map<String, String> objMap = createMap(response.getResponseJson(), "profile_attribute", new String[] {"id", "name", "value", "attribute_type"});
+			objMap.put("selected", "true");
+			response.setResponse(objMap);
 		}
 		return response;
 	}

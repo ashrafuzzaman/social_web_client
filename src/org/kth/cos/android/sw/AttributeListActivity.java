@@ -1,12 +1,9 @@
 package org.kth.cos.android.sw;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
 import org.kth.cos.android.sw.data.Response;
 import org.kth.cos.android.sw.data.Status;
 import org.kth.cos.android.sw.data.UserAccount;
@@ -28,7 +25,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class AttributeListActivity extends ListActivity {
@@ -84,7 +83,6 @@ public class AttributeListActivity extends ListActivity {
 				if (attr.get("selected").equals("true")) {
 					ids.add(attr.get("id"));
 				}
-				Log.i("Selected", attr.get("id") + attr.get("name") + " : " + attr.get("selected"));
 			}
 			try {
 				attributeService.updateAttributeList(profileId, ids);
@@ -92,6 +90,9 @@ public class AttributeListActivity extends ListActivity {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			return true;
+		case R.id.new_attributes:
+			promptNewAttribute();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -132,6 +133,68 @@ public class AttributeListActivity extends ListActivity {
 		alert.show();
 	}
 
+	protected void promptAttributeValue(final int position, final int attributeId, final String value) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		final EditText valueInput = new EditText(this);
+		valueInput.setText(value);
+		valueInput.setSingleLine();
+
+		builder.setMessage("Update attribute");
+		builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				dialog.cancel();
+			}
+		}).setNeutralButton("Save", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				AttributeService attributeService = getAttributeService();
+				try {
+					Log.i("Attribute value", valueInput.getText().toString());
+					Response response = attributeService.updateAttributeValue(attributeId, valueInput.getText().toString());
+					if (response.getStatus() == Status.STATUS_SUCCESS) {
+						Log.i("Updating value", position + " " + valueInput.getText().toString());
+						attributeList.get(position).put("value", valueInput.getText().toString());
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}).setView(valueInput);
+		AlertDialog alert = builder.create();
+		alert.show();
+	}
+
+	protected void promptNewAttribute() {
+		final Dialog dialog = new Dialog(AttributeListActivity.this);
+
+		dialog.setContentView(R.layout.new_attribute);
+		dialog.setTitle("New attribute");
+
+		final TextView txtName = (TextView) dialog.findViewById(R.id.txtName);
+		final TextView txtValue = (TextView) dialog.findViewById(R.id.txtValue);
+
+		((Button) dialog.findViewById(R.id.btnSave)).setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				AttributeService attributeService = getAttributeService();
+				try {
+					Response response = attributeService.createAttribute(profileId, txtName.getText().toString(), txtValue.getText().toString());
+					if (response.getStatus() == Status.STATUS_SUCCESS) {
+						attributeList.add((HashMap<String, String>) response.getResponse());
+						updateAttributeListInUI();
+					}
+					dialog.dismiss();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		((Button) dialog.findViewById(R.id.btnCancel)).setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				dialog.dismiss();
+			}
+		});
+		dialog.show();
+	}
+
 	class AttributeListAdapter extends ArrayAdapter<HashMap<String, String>> {
 
 		public AttributeListAdapter(Context context, List<HashMap<String, String>> objects) {
@@ -139,7 +202,7 @@ public class AttributeListActivity extends ListActivity {
 		}
 
 		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
+		public View getView(final int position, View convertView, ViewGroup parent) {
 			View v = convertView;
 			if (v == null) {
 				LayoutInflater vi = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -151,14 +214,7 @@ public class AttributeListActivity extends ListActivity {
 				txtName.setText(attributeMap.get("name"));
 				txtName.setOnClickListener(new View.OnClickListener() {
 					public void onClick(View v) {
-						AttributeService attributeService = getAttributeService();
-						try {
-							attributeService.updateAttributeValue(Integer.parseInt(attributeMap.get("id")), attributeMap.get("value"));
-							startLoadingList();
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-						//showMessage(attributeMap.get("value"));
+						promptAttributeValue(position, Integer.parseInt(attributeMap.get("id")), attributeMap.get("value"));
 					}
 				});
 
