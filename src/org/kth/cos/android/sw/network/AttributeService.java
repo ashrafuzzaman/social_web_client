@@ -52,6 +52,16 @@ public class AttributeService extends AuthenticatedWebService {
 		return response;
 	}
 	
+	public Response deleteAttribute(int attrId) throws ClientProtocolException, IOException, JSONException {
+		HashMap<String, String> params = new HashMap<String, String>();
+		putAuthHeader(params);
+		Response response = delete("/profile_attributes/" + attrId +".json", params);
+		if (response.getStatus() == Status.STATUS_SUCCESS) {
+			response.setMessage("Value deleted");
+		}
+		return response;
+	}
+	
 	public Response createAttribute(int profileId, String name, String value) throws ClientProtocolException, IOException, JSONException {
 		HashMap<String, String> params = new HashMap<String, String>();
 		putAuthHeader(params);

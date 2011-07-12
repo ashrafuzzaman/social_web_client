@@ -10,7 +10,7 @@
 		<EditText xmlns:android="http://schemas.android.com/apk/res/android"
 			android:layout_height="wrap_content" android:id="@+id/txtName"
 			android:inputType="textShortMessage" android:layout_width="108dp"
-			android:layout_weight="0.23"></EditText>
+			android:singleLine="true" android:layout_weight="0.23"></EditText>
 	</LinearLayout>
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_height="wrap_content" android:layout_width="fill_parent">
@@ -19,7 +19,8 @@
 			android:textSize="30px" android:text="@string/value"></TextView>
 		<EditText xmlns:android="http://schemas.android.com/apk/res/android"
 			android:layout_height="wrap_content" android:id="@+id/txtValue"
-			android:inputType="text" android:layout_width="120dp"></EditText>
+			android:singleLine="true" android:inputType="text"
+			android:layout_width="120dp"></EditText>
 	</LinearLayout>
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_height="wrap_content" android:layout_width="fill_parent">

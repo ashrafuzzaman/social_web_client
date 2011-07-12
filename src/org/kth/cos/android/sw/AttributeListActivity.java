@@ -133,34 +133,81 @@ public class AttributeListActivity extends ListActivity {
 		alert.show();
 	}
 
-	protected void promptAttributeValue(final int position, final int attributeId, final String value) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		final EditText valueInput = new EditText(this);
-		valueInput.setText(value);
-		valueInput.setSingleLine();
+	protected void promptAttributeValue(final int position, final int attributeId, final String name, final String value) {
+		final Dialog dialog = new Dialog(AttributeListActivity.this);
+		dialog.setContentView(R.layout.attribute_popup);
+		dialog.setTitle("Attribute popup");
 
-		builder.setMessage("Update attribute");
-		builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
-				dialog.cancel();
-			}
-		}).setNeutralButton("Save", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
+		((TextView) dialog.findViewById(R.id.lbName)).setText(name);
+		final TextView txtValue = (TextView) dialog.findViewById(R.id.txtValue);
+		txtValue.setText(value);
+
+		((Button) dialog.findViewById(R.id.btnSave)).setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
 				AttributeService attributeService = getAttributeService();
 				try {
-					Log.i("Attribute value", valueInput.getText().toString());
-					Response response = attributeService.updateAttributeValue(attributeId, valueInput.getText().toString());
+					Response response = attributeService.updateAttributeValue(attributeId, txtValue.getText().toString());
 					if (response.getStatus() == Status.STATUS_SUCCESS) {
-						Log.i("Updating value", position + " " + valueInput.getText().toString());
-						attributeList.get(position).put("value", valueInput.getText().toString());
+						attributeList.get(position).put("value", txtValue.getText().toString());
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-		}).setView(valueInput);
-		AlertDialog alert = builder.create();
-		alert.show();
+		});
+		((Button) dialog.findViewById(R.id.btnDelete)).setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				AttributeService attributeService = getAttributeService();
+				try {
+					Response response = attributeService.deleteAttribute(attributeId);
+					if (response.getStatus() == Status.STATUS_SUCCESS) {
+						attributeList.remove(position);
+						updateAttributeListInUI();
+						dialog.dismiss();
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		((Button) dialog.findViewById(R.id.btnCancel)).setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				dialog.dismiss();
+			}
+		});
+		dialog.show();
+
+		
+//		
+//		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//		final EditText valueInput = new EditText(this); 
+//		valueInput.setText(value);
+//		valueInput.setSingleLine();
+//
+//		builder.setMessage("Update attribute");
+//		builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//			public void onClick(DialogInterface dialog, int whichButton) {
+//				dialog.cancel();
+//			}
+//		}).setNeutralButton("Save", new DialogInterface.OnClickListener() {
+//			public void onClick(DialogInterface dialog, int whichButton) {
+//			}
+//		}).setNeutralButton("Delete", new DialogInterface.OnClickListener() {
+//			public void onClick(DialogInterface dialog, int whichButton) {
+//				AttributeService attributeService = getAttributeService();
+//				try {
+//					Response response = attributeService.deleteAttribute(attributeId);
+//					if (response.getStatus() == Status.STATUS_SUCCESS) {
+//						attributeList.remove(position);
+//						updateAttributeListInUI();
+//					}
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		}).setView(valueInput);
+//		AlertDialog alert = builder.create();
+//		alert.show();
 	}
 
 	protected void promptNewAttribute() {
@@ -214,7 +261,7 @@ public class AttributeListActivity extends ListActivity {
 				txtName.setText(attributeMap.get("name"));
 				txtName.setOnClickListener(new View.OnClickListener() {
 					public void onClick(View v) {
-						promptAttributeValue(position, Integer.parseInt(attributeMap.get("id")), attributeMap.get("value"));
+						promptAttributeValue(position, Integer.parseInt(attributeMap.get("id")), attributeMap.get("name"), attributeMap.get("value"));
 					}
 				});
 
