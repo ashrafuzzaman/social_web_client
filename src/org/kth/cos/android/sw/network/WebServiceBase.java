@@ -159,5 +159,9 @@ public class WebServiceBase {
 		}
 		return resourceMap;
 	}
+	
+	public void setBaseUrl(String baseUrl) {
+		this.baseUrl = baseUrl;
+	}
 
 }

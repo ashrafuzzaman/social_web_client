@@ -37,6 +37,7 @@ public class Welcome extends BaseActivity {
 		} else {
 			attachBtnClearCach();
 			attachBtnProfileList();
+			attachBtnFindFriend();
 			// attachBtnFriendsDatastore(profile);
 			makeInvisible(R.id.btnRegister);
 			makeInvisible(R.id.btnSignin);
@@ -77,6 +78,18 @@ public class Welcome extends BaseActivity {
 		btnSignin.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				Intent myIntent = new Intent(Welcome.this, SigninUserActivity.class);
+				Welcome.this.startActivity(myIntent);
+				Welcome.this.finish();
+			}
+		});
+	}
+
+	private void attachBtnFindFriend() {
+		Button btnFindFriend = (Button) findViewById(R.id.btnFindFriend);
+		makeVisible(R.id.btnSignin);
+		btnFindFriend.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				Intent myIntent = new Intent(Welcome.this, FindFriendActivity.class);
 				Welcome.this.startActivity(myIntent);
 				Welcome.this.finish();
 			}

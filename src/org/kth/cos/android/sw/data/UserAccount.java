@@ -134,4 +134,10 @@ public class UserAccount {
 		editor.commit();
 	}
 
+	@Override
+	public String toString() {
+		return "UserAccount [email=" + email + ", password=" + password + ", authToken=" + authToken + ", dataAuthToken=" + dataAuthToken
+				+ ", dataStoreServer=" + dataStoreServer + "]";
+	}
+	
 }

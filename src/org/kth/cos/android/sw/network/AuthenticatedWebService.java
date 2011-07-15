@@ -3,8 +3,8 @@ package org.kth.cos.android.sw.network;
 import java.util.HashMap;
 
 public class AuthenticatedWebService extends WebServiceBase {
-	private String email;
-	private String auth_token;
+	protected String email;
+	protected String auth_token;
 
 	public AuthenticatedWebService(String baseUrl, String email, String auth_token) {
 		super(baseUrl);

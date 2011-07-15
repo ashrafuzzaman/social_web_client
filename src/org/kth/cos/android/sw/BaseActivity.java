@@ -2,16 +2,20 @@ package org.kth.cos.android.sw;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.view.View;
 
 public class BaseActivity extends Activity {
 
 	protected void showMessage(String message) {
-		// Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setMessage(message);
-		AlertDialog alert = builder.create();
-		alert.show();
+		builder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				dialog.dismiss();
+			}
+		});
+		builder.create().show();
 	}
 
 	protected void makeInvisible(int viewId) {

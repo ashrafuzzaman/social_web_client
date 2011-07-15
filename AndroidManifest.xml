@@ -18,5 +18,6 @@
 		<activity android:name=".RegisterUserActivity" />
 		<activity android:name=".ProfileListActivity" />
 		<activity android:name=".AttributeListActivity" />
+		<activity android:name=".FindFriendActivity" />
 	</application>
 </manifest>

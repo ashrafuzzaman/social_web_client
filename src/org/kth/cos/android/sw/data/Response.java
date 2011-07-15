@@ -47,5 +47,13 @@ public class Response {
 	public JSONObject getResponseJson() {
 		return responseJson;
 	}
+	
+	public boolean isOk() {
+		return status == Status.STATUS_SUCCESS;
+	} 
+
+	public boolean hasError() {
+		return status == Status.STATUS_ERROR;
+	} 
 
 }

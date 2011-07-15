@@ -1,9 +1,16 @@
 package org.kth.cos.android.sw;
 
+import java.io.IOException;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
 import org.kth.cos.android.sw.data.Response;
 import org.kth.cos.android.sw.data.Status;
 import org.kth.cos.android.sw.data.UserAccount;
 import org.kth.cos.android.sw.network.DataAuthenticationService;
+import org.kth.cos.android.sw.network.DataHosts;
+import org.kth.cos.android.sw.network.DataServerService;
+import org.kth.cos.android.sw.network.SigninService;
 import org.kth.cos.android.sw.network.UserAuthenticationService;
 
 import android.app.Dialog;
@@ -54,26 +61,16 @@ public class SigninUserActivity extends BaseActivity {
 	public void signin() {
 		final String email = ((TextView) findViewById(R.id.txtEmail)).getText().toString();
 		final String pass = ((TextView) findViewById(R.id.txtPass)).getText().toString();
-		Response responseStatus;
-		try {
-			responseStatus = new UserAuthenticationService().signin(email, pass);
-			if (responseStatus.getStatus() == Status.STATUS_SUCCESS) {
-				UserAccount profile = (UserAccount) responseStatus.getResponse();
-				profile.save(SigninUserActivity.this);
-
-				responseStatus = new DataAuthenticationService().signin(email, pass);
-				if (responseStatus.getStatus() == Status.STATUS_SUCCESS) {
-					profile = (UserAccount) responseStatus.getResponse();
-					profile.update(SigninUserActivity.this);
-					switchToMainActivity();
-				} else {
-					showMessage(responseStatus.getMessage());
-				}
-			} else {
-				showMessage(responseStatus.getMessage());
+		Response response = new SigninService().signIn(email, pass, SigninUserActivity.this);
+		if (response.getStatus() == Status.STATUS_SUCCESS) {
+			try {
+				new DataServerService(email, UserAccount.getAccount(this).getAuthToken()).updateDataServiceHost(DataHosts.DATA_SERVER);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+			switchToMainActivity();
+		} else {
+			showMessage(response.getMessage());
 		}
 	}
 
