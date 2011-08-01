@@ -176,38 +176,6 @@ public class AttributeListActivity extends ListActivity {
 			}
 		});
 		dialog.show();
-
-		
-//		
-//		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//		final EditText valueInput = new EditText(this); 
-//		valueInput.setText(value);
-//		valueInput.setSingleLine();
-//
-//		builder.setMessage("Update attribute");
-//		builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//			public void onClick(DialogInterface dialog, int whichButton) {
-//				dialog.cancel();
-//			}
-//		}).setNeutralButton("Save", new DialogInterface.OnClickListener() {
-//			public void onClick(DialogInterface dialog, int whichButton) {
-//			}
-//		}).setNeutralButton("Delete", new DialogInterface.OnClickListener() {
-//			public void onClick(DialogInterface dialog, int whichButton) {
-//				AttributeService attributeService = getAttributeService();
-//				try {
-//					Response response = attributeService.deleteAttribute(attributeId);
-//					if (response.getStatus() == Status.STATUS_SUCCESS) {
-//						attributeList.remove(position);
-//						updateAttributeListInUI();
-//					}
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		}).setView(valueInput);
-//		AlertDialog alert = builder.create();
-//		alert.show();
 	}
 
 	protected void promptNewAttribute() {

@@ -19,5 +19,6 @@
 		<activity android:name=".ProfileListActivity" />
 		<activity android:name=".AttributeListActivity" />
 		<activity android:name=".FindFriendActivity" />
+		<activity android:name=".NotificationActivity" />
 	</application>
 </manifest>

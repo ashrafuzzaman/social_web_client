@@ -3,7 +3,9 @@ package org.kth.cos.android.sw;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.View;
+import android.widget.Button;
 
 public class BaseActivity extends Activity {
 
@@ -24,6 +26,19 @@ public class BaseActivity extends Activity {
 
 	protected void makeVisible(int viewId) {
 		findViewById(viewId).setVisibility(View.VISIBLE);
+	}
+
+	protected void attachButton(int btnID, final Class activityClass, final boolean closeThisActivity) {
+		Button button = (Button) findViewById(btnID);
+		button.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				Intent myIntent = new Intent(BaseActivity.this, activityClass);
+				BaseActivity.this.startActivity(myIntent);
+				if (closeThisActivity) {
+					BaseActivity.this.finish();
+				}
+			}
+		});
 	}
 
 }

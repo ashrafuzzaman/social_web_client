@@ -1,14 +1,10 @@
 package org.kth.cos.android.sw.network;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import org.apache.http.client.ClientProtocolException;
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.kth.cos.android.sw.data.Response;
 import org.kth.cos.android.sw.data.Status;
 
