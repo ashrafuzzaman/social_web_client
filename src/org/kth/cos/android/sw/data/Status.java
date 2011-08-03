@@ -39,6 +39,10 @@ public class Status {
 		return postedAt;
 	}
 
+	public String getPostedAtStr() {
+		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(postedAt);
+	}
+
 	public void setPostedAt(Date postedAt) {
 		this.postedAt = postedAt;
 	}

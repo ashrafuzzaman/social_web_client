@@ -89,8 +89,8 @@ public class MyStatusActivity extends ListActivity {
 				v = vi.inflate(R.layout.status_rowlayout, null);
 			}
 			final Status status = statusList.get(position);
-			TextView txtStatus = (TextView) v.findViewById(R.id.txtStatus);
-			txtStatus.setText(status.getValue());
+			((TextView) v.findViewById(R.id.txtStatus)).setText(status.getValue());
+			((TextView) v.findViewById(R.id.txtPostedAt)).setText(status.getPostedAtStr());
 			return v;
 		}
 	}

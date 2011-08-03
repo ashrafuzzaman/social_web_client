@@ -47,6 +47,7 @@ public final class R {
         public static final int txtEmail=0x7f05000c;
         public static final int txtName=0x7f05001b;
         public static final int txtPass=0x7f050021;
+        public static final int txtPostedAt=0x7f050025;
         public static final int txtProfileName=0x7f050020;
         public static final int txtStatus=0x7f05001d;
         public static final int txtTitle=0x7f05001c;
