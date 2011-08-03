@@ -23,7 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.kth.cos.android.sw.data.Response;
-import org.kth.cos.android.sw.data.Status;
+import org.kth.cos.android.sw.data.ResponseStatus;
 
 import android.util.Log;
 
@@ -42,9 +42,9 @@ public class WebServiceBase {
 
 		JSONObject rootJson = getJsonResponse(response);
 		if (rootJson.has(ERROR_ROOT)) {
-			return new Response(Status.STATUS_ERROR, rootJson.getString(ERROR_ROOT));
+			return new Response(ResponseStatus.STATUS_ERROR, rootJson.getString(ERROR_ROOT));
 		} else {
-			return new Response(Status.STATUS_SUCCESS, rootJson);
+			return new Response(ResponseStatus.STATUS_SUCCESS, rootJson);
 		}
 	}
 
@@ -55,9 +55,9 @@ public class WebServiceBase {
 
 		JSONObject rootJson = getJsonResponse(response);
 		if (rootJson.has(ERROR_ROOT)) {
-			return new Response(Status.STATUS_ERROR, rootJson.getString(ERROR_ROOT));
+			return new Response(ResponseStatus.STATUS_ERROR, rootJson.getString(ERROR_ROOT));
 		} else {
-			return new Response(Status.STATUS_SUCCESS, rootJson);
+			return new Response(ResponseStatus.STATUS_SUCCESS, rootJson);
 		}
 	}
 
@@ -68,9 +68,9 @@ public class WebServiceBase {
 
 		JSONObject rootJson = getJsonResponse(response);
 		if (rootJson.has(ERROR_ROOT)) {
-			return new Response(Status.STATUS_ERROR, rootJson.getString(ERROR_ROOT));
+			return new Response(ResponseStatus.STATUS_ERROR, rootJson.getString(ERROR_ROOT));
 		} else {
-			return new Response(Status.STATUS_SUCCESS, rootJson);
+			return new Response(ResponseStatus.STATUS_SUCCESS, rootJson);
 		}
 	}
 
@@ -81,9 +81,9 @@ public class WebServiceBase {
 
 		JSONObject rootJson = getJsonResponse(response);
 		if (rootJson.has(ERROR_ROOT)) {
-			return new Response(Status.STATUS_ERROR, rootJson.getString(ERROR_ROOT));
+			return new Response(ResponseStatus.STATUS_ERROR, rootJson.getString(ERROR_ROOT));
 		} else {
-			return new Response(Status.STATUS_SUCCESS, rootJson);
+			return new Response(ResponseStatus.STATUS_SUCCESS, rootJson);
 		}
 	}
 

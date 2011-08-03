@@ -3,28 +3,28 @@ package org.kth.cos.android.sw.data;
 import org.json.JSONObject;
 
 public class Response {
-	private Status status;
+	private ResponseStatus status;
 	private String message;
 	private Object response;
 	private JSONObject responseJson;
 
-	public Response(Status status, String message) {
+	public Response(ResponseStatus status, String message) {
 		this.status = status;
 		this.message = message;
 	}
 
-	public Response(Status status, String message, Object response) {
+	public Response(ResponseStatus status, String message, Object response) {
 		this.status = status;
 		this.message = message;
 		this.response = response;
 	}
 
-	public Response(Status status, JSONObject responseJson) {
+	public Response(ResponseStatus status, JSONObject responseJson) {
 		this.status = status;
 		this.responseJson = responseJson;
 	}
 
-	public Status getStatus() {
+	public ResponseStatus getStatus() {
 		return status;
 	}
 
@@ -49,11 +49,11 @@ public class Response {
 	}
 	
 	public boolean isOk() {
-		return status == Status.STATUS_SUCCESS;
+		return status == ResponseStatus.STATUS_SUCCESS;
 	} 
 
 	public boolean hasError() {
-		return status == Status.STATUS_ERROR;
+		return status == ResponseStatus.STATUS_ERROR;
 	} 
 
 }

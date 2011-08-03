@@ -10,8 +10,11 @@ import javax.crypto.spec.PBEKeySpec;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
+import org.kth.cos.android.sw.data.FriendManager;
 import org.kth.cos.android.sw.data.Response;
-import org.kth.cos.android.sw.data.Status;
+import org.kth.cos.android.sw.data.ResponseStatus;
+
+import android.content.Context;
 
 public class FriendService extends AuthenticatedWebService {
 
@@ -24,7 +27,7 @@ public class FriendService extends AuthenticatedWebService {
 		HashMap<String, String> params = new HashMap<String, String>();
 		putAuthHeader(params);
 		Response response = get("/friends/friend_reqests.json", params);
-		if (response.getStatus() == Status.STATUS_SUCCESS) {
+		if (response.getStatus() == ResponseStatus.STATUS_SUCCESS) {
 			response.setMessage("Friend requests");
 			response.setResponse(createList(response.getResponseJson(), "friends", "friend", new String[] { "id", "email", "status", "shared_key" }));
 		}
@@ -57,7 +60,16 @@ public class FriendService extends AuthenticatedWebService {
 		}
 		return response;
 	}
-
+	
+	
+	public Response acceptFriendRequestProcess(String friendsEmail, String friendsDataServer, String sharedKey, Context context) throws ClientProtocolException, IOException, JSONException {
+		acceptFriendRequest(friendsEmail);
+		Response response = notifyAcceptedFriendRequest(friendsEmail, friendsDataServer, sharedKey);
+		FriendManager friendManager = new FriendManager(context);
+		friendManager.addFriend(friendsEmail, friendsDataServer, sharedKey);
+		return response;
+	}
+		
 	public Response acceptFriendRequest(String friendsEmail) throws ClientProtocolException, IOException, JSONException {
 		HashMap<String, String> params = new HashMap<String, String>();
 		putAuthHeader(params);
@@ -91,7 +103,7 @@ public class FriendService extends AuthenticatedWebService {
 		params.put("friend_with", friendsEmail);
 		params.put("shared_key", sharedKey);
 		Response response = post("/friends/save_friend_requested.json", params);
-		if (response.getStatus() == Status.STATUS_SUCCESS) {
+		if (response.getStatus() == ResponseStatus.STATUS_SUCCESS) {
 			response.setMessage("Friend request sent");
 		}
 		return response;

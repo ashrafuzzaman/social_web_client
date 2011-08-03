@@ -3,10 +3,11 @@ package org.kth.cos.android.sw;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.kth.cos.android.sw.data.FriendManager;
 import org.kth.cos.android.sw.data.Response;
-import org.kth.cos.android.sw.data.Status;
+import org.kth.cos.android.sw.data.ResponseStatus;
 import org.kth.cos.android.sw.data.UserAccount;
 import org.kth.cos.android.sw.network.FriendService;
 
@@ -41,7 +42,7 @@ public class NotificationActivity extends ListActivity {
 		FriendService friendService = getFriendService();
 		try {
 			Response response = friendService.getFriendRequestsList();
-			if (response.getStatus() == Status.STATUS_SUCCESS) {
+			if (response.getStatus() == ResponseStatus.STATUS_SUCCESS) {
 				notificationList = (ArrayList<HashMap<String, String>>) (response.getResponse());
 			}
 		} catch (Exception e) {
@@ -96,8 +97,7 @@ public class NotificationActivity extends ListActivity {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				FriendService friendService = getFriendService();
 				try {
-					friendService.acceptFriendRequest(email);
-					friendService.notifyAcceptedFriendRequest(email, FriendManager.lookupDatastore(email), sharedKey);
+					friendService.acceptFriendRequestProcess(email, new FriendManager(NotificationActivity.this).getDatastore(email), sharedKey, NotificationActivity.this);
 					startLoadingList();
 				} catch (Exception e) {
 					e.printStackTrace();

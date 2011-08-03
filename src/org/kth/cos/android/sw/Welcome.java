@@ -1,5 +1,8 @@
 package org.kth.cos.android.sw;
 
+import java.util.Map;
+
+import org.kth.cos.android.sw.data.FriendManager;
 import org.kth.cos.android.sw.data.UserAccount;
 
 import android.os.Bundle;
@@ -27,12 +30,14 @@ public class Welcome extends BaseActivity {
 			attachButton(R.id.btnSignin, SigninUserActivity.class, true);
 			makeInvisible(R.id.btnProfileList);
 		} else {
-			attachBtnClearCach();
+			makeInvisible(R.id.btnRegister);
+			makeInvisible(R.id.btnSignin);
+			//attachBtnClearCach();
+			attachButton(R.id.btnMyStatus, MyStatusActivity.class, false);
 			attachButton(R.id.btnProfileList, ProfileListActivity.class, false);
 			attachButton(R.id.btnFindFriend, FindFriendActivity.class, false);
 			attachButton(R.id.btnNotification, NotificationActivity.class, false);
-			makeInvisible(R.id.btnRegister);
-			makeInvisible(R.id.btnSignin);
+			attachButton(R.id.btnPostStatus, PostStatus.class, false);
 		}
 
 		attachBtnExit();

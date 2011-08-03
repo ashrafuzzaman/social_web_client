@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.kth.cos.android.sw.data.Response;
-import org.kth.cos.android.sw.data.Status;
+import org.kth.cos.android.sw.data.ResponseStatus;
 import org.kth.cos.android.sw.data.UserAccount;
 import org.kth.cos.android.sw.network.AttributeService;
 
@@ -51,7 +51,7 @@ public class AttributeListActivity extends ListActivity {
 		AttributeService attributeService = getAttributeService();
 		try {
 			Response response = attributeService.getAttributeList(profileId);
-			if (response.getStatus() == Status.STATUS_SUCCESS) {
+			if (response.getStatus() == ResponseStatus.STATUS_SUCCESS) {
 				attributeList = (ArrayList<HashMap<String, String>>) (response.getResponse());
 			}
 		} catch (Exception e) {
@@ -147,7 +147,7 @@ public class AttributeListActivity extends ListActivity {
 				AttributeService attributeService = getAttributeService();
 				try {
 					Response response = attributeService.updateAttributeValue(attributeId, txtValue.getText().toString());
-					if (response.getStatus() == Status.STATUS_SUCCESS) {
+					if (response.getStatus() == ResponseStatus.STATUS_SUCCESS) {
 						attributeList.get(position).put("value", txtValue.getText().toString());
 					}
 				} catch (Exception e) {
@@ -160,7 +160,7 @@ public class AttributeListActivity extends ListActivity {
 				AttributeService attributeService = getAttributeService();
 				try {
 					Response response = attributeService.deleteAttribute(attributeId);
-					if (response.getStatus() == Status.STATUS_SUCCESS) {
+					if (response.getStatus() == ResponseStatus.STATUS_SUCCESS) {
 						attributeList.remove(position);
 						updateAttributeListInUI();
 						dialog.dismiss();
@@ -192,7 +192,7 @@ public class AttributeListActivity extends ListActivity {
 				AttributeService attributeService = getAttributeService();
 				try {
 					Response response = attributeService.createAttribute(profileId, txtName.getText().toString(), txtValue.getText().toString());
-					if (response.getStatus() == Status.STATUS_SUCCESS) {
+					if (response.getStatus() == ResponseStatus.STATUS_SUCCESS) {
 						attributeList.add((HashMap<String, String>) response.getResponse());
 						updateAttributeListInUI();
 					}

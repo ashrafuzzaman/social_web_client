@@ -8,7 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.kth.cos.android.sw.data.UserAccount;
 import org.kth.cos.android.sw.data.Response;
-import org.kth.cos.android.sw.data.Status;
+import org.kth.cos.android.sw.data.ResponseStatus;
 
 public abstract class AuthenticationService extends WebServiceBase {
 
@@ -22,7 +22,7 @@ public abstract class AuthenticationService extends WebServiceBase {
 		params.put("email", email);
 		params.put("password", password);
 		Response response = post("/api/users.json", params);
-		if (response.getStatus() == Status.STATUS_SUCCESS) {
+		if (response.getStatus() == ResponseStatus.STATUS_SUCCESS) {
 			response.setResponse(new UserAccount(email, password));
 		}
 		return response;
@@ -34,7 +34,7 @@ public abstract class AuthenticationService extends WebServiceBase {
 		params.put("email", email);
 		params.put("password", password);
 		Response response = post("/api/sign_in.json", params);
-		if (response.getStatus() == Status.STATUS_SUCCESS) {
+		if (response.getStatus() == ResponseStatus.STATUS_SUCCESS) {
 			JSONObject json = response.getResponseJson().getJSONObject("user");
 			UserAccount profile = new UserAccount(json.getString("email"), password);
 			setAuthToken(profile, json.getString("authentication_token"));

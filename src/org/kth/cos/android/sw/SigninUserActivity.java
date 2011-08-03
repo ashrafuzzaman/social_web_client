@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.kth.cos.android.sw.data.Response;
-import org.kth.cos.android.sw.data.Status;
+import org.kth.cos.android.sw.data.ResponseStatus;
 import org.kth.cos.android.sw.data.UserAccount;
 import org.kth.cos.android.sw.network.DataAuthenticationService;
 import org.kth.cos.android.sw.network.DataHosts;
@@ -62,7 +62,7 @@ public class SigninUserActivity extends BaseActivity {
 		final String email = ((TextView) findViewById(R.id.txtEmail)).getText().toString();
 		final String pass = ((TextView) findViewById(R.id.txtPass)).getText().toString();
 		Response response = new SigninService().signIn(email, pass, SigninUserActivity.this);
-		if (response.getStatus() == Status.STATUS_SUCCESS) {
+		if (response.getStatus() == ResponseStatus.STATUS_SUCCESS) {
 			try {
 				new DataServerService(email, UserAccount.getAccount(this).getAuthToken()).updateDataServiceHost(DataHosts.DATA_SERVER);
 			} catch (Exception e) {

@@ -6,11 +6,17 @@
 		android:layout_height="wrap_content" android:id="@+id/btnRegister"
 		android:text="@string/register"></Button>
 	<Button android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:id="@+id/btnPostStatus"
+		android:text="Post status"></Button>
+	<Button android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:text="@string/signin"
 		android:id="@+id/btnSignin"></Button>
 	<Button android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:id="@+id/btnNotification"
 		android:text="Notification list"></Button>
+	<Button android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:id="@+id/btnMyStatus"
+		android:text="My Status"></Button>
 	<Button android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:id="@+id/btnProfileList"
 		android:text="@string/profileList"></Button>

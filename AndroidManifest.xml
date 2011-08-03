@@ -20,5 +20,7 @@
 		<activity android:name=".AttributeListActivity" />
 		<activity android:name=".FindFriendActivity" />
 		<activity android:name=".NotificationActivity" />
+		<activity android:name=".PostStatus" />
+		<activity android:name=".MyStatusActivity" />
 	</application>
 </manifest>

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.kth.cos.android.sw.data.Response;
-import org.kth.cos.android.sw.data.Status;
+import org.kth.cos.android.sw.data.ResponseStatus;
 import org.kth.cos.android.sw.data.UserAccount;
 import org.kth.cos.android.sw.network.ProfileService;
 
@@ -44,8 +44,8 @@ public class ProfileListActivity extends ListActivity {
 		UserAccount profile = UserAccount.getAccount(this);
 		ProfileService profileService = new ProfileService(profile.getEmail(), profile.getDataAuthToken());
 		try {
-			Response response = profileService.getProfileList();
-			if (response.getStatus() == Status.STATUS_SUCCESS) {
+			Response response = profileService.getProfileList(ProfileListActivity.this);
+			if (response.getStatus() == ResponseStatus.STATUS_SUCCESS) {
 				profileList = (ArrayList<HashMap<String, String>>) (response.getResponse());
 			}
 		} catch (Exception e) {
@@ -57,7 +57,7 @@ public class ProfileListActivity extends ListActivity {
 		ProfileService profileService = getProfileService();
 		try {
 			Response response = profileService.createProfile(profileName);
-			if (response.getStatus() == Status.STATUS_SUCCESS) {
+			if (response.getStatus() == ResponseStatus.STATUS_SUCCESS) {
 				startLoadingList();
 			} else {
 				showMessage(response.getMessage());
@@ -107,7 +107,7 @@ public class ProfileListActivity extends ListActivity {
 			Response response;
 			try {
 				response = profileService.deleteProfile(profileId);
-				if (response.getStatus() == Status.STATUS_SUCCESS) {
+				if (response.getStatus() == ResponseStatus.STATUS_SUCCESS) {
 					startLoadingList();
 				}
 				showMessage(response.getMessage());

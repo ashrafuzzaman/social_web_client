@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.kth.cos.android.sw.data.Response;
-import org.kth.cos.android.sw.data.Status;
+import org.kth.cos.android.sw.data.ResponseStatus;
 import org.kth.cos.android.sw.data.UserAccount;
 import org.kth.cos.android.sw.network.DataAuthenticationService;
 import org.kth.cos.android.sw.network.UserAuthenticationService;
@@ -72,7 +72,7 @@ public class RegisterUserActivity extends BaseActivity {
 	public void register(String email, String pass) {
 		try {
 			Response responseStatus = new UserAuthenticationService().register(email, pass);
-			if (responseStatus.getStatus() == Status.STATUS_SUCCESS) {
+			if (responseStatus.getStatus() == ResponseStatus.STATUS_SUCCESS) {
 				UserAccount profile = new UserAccount(email, pass);
 				profile.save(RegisterUserActivity.this);
 				responseStatus = new DataAuthenticationService().register(email, pass);

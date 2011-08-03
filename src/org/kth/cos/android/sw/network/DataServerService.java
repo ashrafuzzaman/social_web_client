@@ -11,7 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.kth.cos.android.sw.data.UserAccount;
 import org.kth.cos.android.sw.data.Response;
-import org.kth.cos.android.sw.data.Status;
+import org.kth.cos.android.sw.data.ResponseStatus;
 
 public class DataServerService extends AuthenticatedWebService {
 
@@ -24,7 +24,7 @@ public class DataServerService extends AuthenticatedWebService {
 		putAuthHeader(params);
 		params.put("data_service_host", data_service_host);
 		Response response = post("/api/update_data_service_host.json", params);
-		if (response.getStatus() == Status.STATUS_SUCCESS) {
+		if (response.getStatus() == ResponseStatus.STATUS_SUCCESS) {
 			response.setMessage("Data service updated");
 		}
 		return response;
@@ -35,7 +35,7 @@ public class DataServerService extends AuthenticatedWebService {
 		putAuthHeader(params);
 		params.put("emails", join(emails));
 		Response response = post("/api/data_service_hosts.json", params);
-		if (response.getStatus() == Status.STATUS_SUCCESS) {
+		if (response.getStatus() == ResponseStatus.STATUS_SUCCESS) {
 			response.setMessage("Data servers found");
 			response.setResponse(createProfileList(response.getResponseJson()));
 		}
