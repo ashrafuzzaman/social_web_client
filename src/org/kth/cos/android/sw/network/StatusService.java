@@ -8,9 +8,12 @@ import java.util.List;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
+import org.kth.cos.android.sw.data.Friend;
 import org.kth.cos.android.sw.data.Response;
 import org.kth.cos.android.sw.data.ResponseStatus;
 import org.kth.cos.android.sw.data.Status;
+
+import android.util.Log;
 
 public class StatusService extends AuthenticatedWebService {
 
@@ -18,17 +21,41 @@ public class StatusService extends AuthenticatedWebService {
 		super(DataHosts.DATA_SERVER, email, auth_token);
 	}
 
-	public Response getStatusList() throws ClientProtocolException, IOException, JSONException, ParseException {
+	public Response getMyStatusList() throws ClientProtocolException, IOException, JSONException, ParseException {
 		HashMap<String, String> params = new HashMap<String, String>();
 		putAuthHeader(params);
-		Response response = get("/statuses.json", params);
+		return getStatusList("/statuses.json",params);
+	}
+
+	public Response getAllFriendsStatus(List<Friend> friendList) throws ClientProtocolException, IOException, JSONException, ParseException {
+		HashMap<String, String> params = new HashMap<String, String>();
+		putAuthHeader(params);
+		for (Friend friend : friendList) {
+			Log.i("Friend", String.format("email :: %s, shared_key :: %s, Data store :: %s", friend.getEmail(), friend.getSharedKey(), friend.getDataStore()));
+			return getFriendsStatus(friend.getEmail(), friend.getSharedKey(), friend.getDataStore());
+		}
+		return null;
+	}
+
+	public Response getFriendsStatus(String friendsEmail, String sharedKey, String dataStore) throws ClientProtocolException, IOException,
+			JSONException, ParseException {
+		HashMap<String, String> params = new HashMap<String, String>();
+		setBaseUrl(dataStore);
+		params.put("email", friendsEmail);
+		params.put("friends_email", email);
+		params.put("shared_key", sharedKey);
+		return getStatusList("/statuses/friends_status.json", params);
+	}
+
+	private Response getStatusList(String path, HashMap<String, String> params) throws ClientProtocolException, IOException, JSONException, ParseException {
+		Response response = get(path, params);
 		if (response.getStatus() == ResponseStatus.STATUS_SUCCESS) {
 			response.setMessage("Status list");
 			List<HashMap<String, String>> statusMapList = createList(response.getResponseJson(), "statuses", "status", new String[] { "id", "value",
-					"created_at", "profile_name"});
+					"created_at", "profile_name" });
 
 			List<Status> statusList = new ArrayList<Status>();
-			for (HashMap<String,String> statusMap : statusMapList) {
+			for (HashMap<String, String> statusMap : statusMapList) {
 				statusList.add(new Status(statusMap.get("value"), statusMap.get("profile_name"), statusMap.get("created_at")));
 			}
 			response.setResponse(statusList);

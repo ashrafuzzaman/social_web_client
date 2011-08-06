@@ -32,13 +32,18 @@ public class BaseActivity extends Activity {
 		Button button = (Button) findViewById(btnID);
 		button.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				Intent myIntent = new Intent(BaseActivity.this, activityClass);
-				BaseActivity.this.startActivity(myIntent);
-				if (closeThisActivity) {
-					BaseActivity.this.finish();
-				}
+				startNewActivity(activityClass, closeThisActivity);
 			}
+
 		});
+	}
+
+	public void startNewActivity(final Class activityClass, final boolean closeThisActivity) {
+		Intent myIntent = new Intent(BaseActivity.this, activityClass);
+		BaseActivity.this.startActivity(myIntent);
+		if (closeThisActivity) {
+			BaseActivity.this.finish();
+		}
 	}
 
 }

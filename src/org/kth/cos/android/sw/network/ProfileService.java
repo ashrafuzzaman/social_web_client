@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
+import org.kth.cos.android.sw.data.Friend;
+import org.kth.cos.android.sw.data.FriendManager;
 import org.kth.cos.android.sw.data.ProfileManager;
 import org.kth.cos.android.sw.data.Response;
 import org.kth.cos.android.sw.data.ResponseStatus;
@@ -17,6 +19,14 @@ public class ProfileService extends AuthenticatedWebService {
 
 	public ProfileService(String email, String auth_token) {
 		super(DataHosts.DATA_SERVER, email, auth_token);
+	}
+
+	public void syncProfileList(Context context) {
+		try {
+			getProfileList(context);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	// http://192.168.0.10:3001/profiles.json?email=ashrafuzzaman.g2@gmail.com&auth_token=uUKDt0bGxyOTGbUwxWne
@@ -48,11 +58,13 @@ public class ProfileService extends AuthenticatedWebService {
 		return response;
 	}
 
-	public Response deleteProfile(Integer profileId) throws ClientProtocolException, IOException, JSONException {
+	public Response deleteProfile(Integer profileId, Context context) throws ClientProtocolException, IOException, JSONException {
 		HashMap<String, String> params = new HashMap<String, String>();
 		putAuthHeader(params);
 		Response response = delete("/profiles/" + profileId + ".json", params);
 		if (response.getStatus() == ResponseStatus.STATUS_SUCCESS) {
+			ProfileManager profileManager = new ProfileManager(context);
+			profileManager.deleteProfile(profileId);
 			response.setMessage("Profiles deleted");
 		}
 		return response;

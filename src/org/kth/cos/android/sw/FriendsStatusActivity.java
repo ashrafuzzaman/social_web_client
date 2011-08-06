@@ -1,12 +1,14 @@
 package org.kth.cos.android.sw;
 
-import java.util.HashMap;
 import java.util.List;
 
+import org.kth.cos.android.sw.data.Friend;
+import org.kth.cos.android.sw.data.FriendManager;
 import org.kth.cos.android.sw.data.Response;
 import org.kth.cos.android.sw.data.ResponseStatus;
 import org.kth.cos.android.sw.data.Status;
 import org.kth.cos.android.sw.data.UserAccount;
+import org.kth.cos.android.sw.network.FriendService;
 import org.kth.cos.android.sw.network.StatusService;
 
 import android.app.Dialog;
@@ -21,7 +23,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class MyStatusActivity extends ListActivity {
+public class FriendsStatusActivity extends ListActivity {
 	List<Status> statusList;
 
 	final Handler mHandler = new Handler();
@@ -30,14 +32,16 @@ public class MyStatusActivity extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setTitle("My Status");
+		setTitle("Friends Status");
 		startLoadingList();
 	}
 
 	private void generateList() {
-		StatusService friendService = getStatusService();
+		StatusService statusService = getStatusService();
+		FriendManager friendManager = new FriendManager(FriendsStatusActivity.this);
+		List<Friend> friendList = friendManager.fetchAllFriend();
 		try {
-			Response response = friendService.getMyStatusList();
+			Response response = statusService.getAllFriendsStatus(friendList);
 			if (response.getStatus() == ResponseStatus.STATUS_SUCCESS) {
 				statusList = (List<Status>) (response.getResponse());
 			}
@@ -65,7 +69,7 @@ public class MyStatusActivity extends ListActivity {
 	};
 
 	protected void startLoadingList() {
-		this.progressDialog = ProgressDialog.show(MyStatusActivity.this, "Wait", "Loading Status...", true);
+		this.progressDialog = ProgressDialog.show(FriendsStatusActivity.this, "Wait", "Loading Status...", true);
 		Thread t = new Thread() {
 			public void run() {
 				generateList();

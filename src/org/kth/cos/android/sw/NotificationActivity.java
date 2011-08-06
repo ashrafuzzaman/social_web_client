@@ -89,15 +89,15 @@ public class NotificationActivity extends ListActivity {
 		AlertDialog alert = builder.create();
 		alert.show();
 	}
-	
-	private void promptAcceptFrndReq(final String email, final String sharedKey) {
+
+	private void promptAcceptFrndReq(final String email, final String sharedKey, final String dataStore) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setMessage("Do you want to be friend with " + email);
 		builder.setNeutralButton("Accept", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				FriendService friendService = getFriendService();
 				try {
-					friendService.acceptFriendRequestProcess(email, new FriendManager(NotificationActivity.this).getDatastore(email), sharedKey, NotificationActivity.this);
+					friendService.acceptFriendRequestProcess(email, dataStore, sharedKey, NotificationActivity.this);
 					startLoadingList();
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -132,7 +132,7 @@ public class NotificationActivity extends ListActivity {
 				txtTitle.setText(title);
 				txtTitle.setOnClickListener(new View.OnClickListener() {
 					public void onClick(View v) {
-						promptAcceptFrndReq(notificationMap.get("email"), notificationMap.get("shared_key"));
+						promptAcceptFrndReq(notificationMap.get("email"), notificationMap.get("shared_key"), notificationMap.get("data_store"));
 					}
 				});
 			}

@@ -2,33 +2,48 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical" android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
-	<Button android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:id="@+id/btnRegister"
-		android:text="@string/register"></Button>
-	<Button android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:id="@+id/btnPostStatus"
-		android:text="Post status"></Button>
-	<Button android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:text="@string/signin"
-		android:id="@+id/btnSignin"></Button>
-	<Button android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:id="@+id/btnNotification"
-		android:text="Notification list"></Button>
-	<Button android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:id="@+id/btnMyStatus"
-		android:text="My Status"></Button>
-	<Button android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:id="@+id/btnProfileList"
-		android:text="@string/profileList"></Button>
-	<Button android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:id="@+id/btnFindFriend"
-		android:text="Find Friend"></Button>
-	<Button android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:id="@+id/btnClrCach"
-		android:text="@string/clear_cach"></Button>
-	<Button android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:id="@+id/btnFrndDataStore"
-		android:text="@string/friendsDatastore"></Button>
+	<LinearLayout android:id="@+id/loggedOutLayout"
+		android:orientation="vertical" android:layout_width="fill_parent"
+		android:layout_height="fill_parent">
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/btnRegister"
+			android:text="@string/register"></Button>
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:text="@string/signin"
+			android:id="@+id/btnSignin"></Button>
+	</LinearLayout>
+	<LinearLayout android:id="@+id/loggedInLayout"
+		android:orientation="vertical" android:layout_width="fill_parent"
+		android:layout_height="fill_parent">
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/btnNotification"
+			android:text="Notification list"></Button>
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/btnMyStatus"
+			android:text="My Status"></Button>
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/btnFriendsStatus"
+			android:text="Friends Status"></Button>
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/btnPostStatus"
+			android:text="Post status"></Button>
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/btnManageFriends"
+			android:text="Manage friends"></Button>
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/btnProfileList"
+			android:text="@string/profileList"></Button>
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/btnFindFriend"
+			android:text="Find Friend"></Button>
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/btnClrCach"
+			android:text="Log out"></Button>
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/btnFrndDataStore"
+			android:text="@string/friendsDatastore"></Button>
+	</LinearLayout>
+
 	<Button android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:id="@+id/btnExit"
 		android:text="@string/exit"></Button>

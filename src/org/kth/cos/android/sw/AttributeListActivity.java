@@ -76,7 +76,7 @@ public class AttributeListActivity extends ListActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.save_attributes:
-			showMessage("save");
+			showMessage("Save     ");
 			AttributeService attributeService = getAttributeService();
 			List<String> ids = new ArrayList<String>();
 			for (HashMap<String, String> attr : attributeList) {
@@ -153,6 +153,7 @@ public class AttributeListActivity extends ListActivity {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+				dialog.dismiss();
 			}
 		});
 		((Button) dialog.findViewById(R.id.btnDelete)).setOnClickListener(new View.OnClickListener() {

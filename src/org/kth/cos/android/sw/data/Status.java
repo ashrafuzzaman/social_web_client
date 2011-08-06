@@ -7,16 +7,23 @@ import java.util.Date;
 public class Status {
 	private String value;
 	private String profileName;
+	private String postedBy;
 	private Date postedAt;
 
 	public Status() {
 	}
 
 	public Status(String value, String profileName, String postedAtStr) throws ParseException {
-		super();
 		this.value = value;
 		this.profileName = profileName;
 		this.postedAt = parseDate(postedAtStr);
+	}
+
+	public Status(String value, String profileName, String postedBy, String postedAtStr) throws ParseException {
+		this.value = value;
+		this.profileName = profileName;
+		this.postedAt = parseDate(postedAtStr);
+		this.postedBy = postedBy;
 	}
 
 	public String getValue() {
@@ -49,6 +56,14 @@ public class Status {
 
 	public Date parseDate(String dateStr) throws ParseException {
 		return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(dateStr);
+	}
+
+	public String getPostedBy() {
+		return postedBy;
+	}
+
+	public void setPostedBy(String postedBy) {
+		this.postedBy = postedBy;
 	}
 
 }

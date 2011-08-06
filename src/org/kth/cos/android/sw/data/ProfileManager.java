@@ -18,7 +18,7 @@ public class ProfileManager extends SQLiteOpenHelper {
 
 	public ProfileManager(Context context) {
 		super(context, DATABASE_NAME, null, 1);
-		//createDatabase(getWritableDatabase());
+		// createDatabase(getWritableDatabase());
 	}
 
 	@Override
@@ -37,6 +37,12 @@ public class ProfileManager extends SQLiteOpenHelper {
 		onCreate(db);
 	}
 
+	public void refrashTable() {
+		SQLiteDatabase db = getWritableDatabase();
+		db.delete(TABLE_NAME, null, null);
+		db.close();
+	}
+
 	public void addProfile(int profileId, String name) {
 		ContentValues values = new ContentValues();
 		if (fetchProfile(profileId) == null) {
@@ -48,15 +54,24 @@ public class ProfileManager extends SQLiteOpenHelper {
 		}
 	}
 
+	public void deleteProfile(int profileId) {
+		SQLiteDatabase database = getWritableDatabase();
+		database.delete(TABLE_NAME, "profile_id=?", new String[] { String.valueOf(profileId) });
+		database.close();
+	}
+
 	public Profile fetchProfile(int profileId) {
 		SQLiteDatabase database = getReadableDatabase();
 		Cursor cursor = database.query(TABLE_NAME, new String[] { "profile_id", "name" }, "profile_id = ?",
 				new String[] { String.valueOf(profileId) }, null, null, null);
 		cursor.moveToFirst();
+		Profile profile = null;
 		if (cursor.getCount() > 0) {
-			return getProfile(cursor);
+			profile = getProfile(cursor);
 		}
-		return null;
+		cursor.close();
+		database.close();
+		return profile;
 	}
 
 	public List<Profile> fetchAllProfile() {
@@ -68,9 +83,10 @@ public class ProfileManager extends SQLiteOpenHelper {
 				friendList.add(getProfile(cursor));
 			} while (cursor.moveToNext());
 		}
+		cursor.close();
 		return friendList;
 	}
-	
+
 	public static String[] fetchAllProfileName(List<Profile> profiles) {
 		String[] profileNames = new String[profiles.size()];
 		for (int i = 0; i < profileNames.length; i++) {
@@ -82,6 +98,7 @@ public class ProfileManager extends SQLiteOpenHelper {
 	public Cursor fetchProfileCursor() {
 		SQLiteDatabase database = getReadableDatabase();
 		Cursor cursor = database.query(TABLE_NAME, new String[] { "profile_id", "name" }, null, null, null, null, null);
+		database.close();
 		return cursor;
 	}
 

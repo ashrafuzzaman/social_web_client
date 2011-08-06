@@ -1,8 +1,10 @@
 package org.kth.cos.android.sw.network;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -10,6 +12,7 @@ import javax.crypto.spec.PBEKeySpec;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
+import org.kth.cos.android.sw.data.Friend;
 import org.kth.cos.android.sw.data.FriendManager;
 import org.kth.cos.android.sw.data.Response;
 import org.kth.cos.android.sw.data.ResponseStatus;
@@ -29,7 +32,35 @@ public class FriendService extends AuthenticatedWebService {
 		Response response = get("/friends/friend_reqests.json", params);
 		if (response.getStatus() == ResponseStatus.STATUS_SUCCESS) {
 			response.setMessage("Friend requests");
-			response.setResponse(createList(response.getResponseJson(), "friends", "friend", new String[] { "id", "email", "status", "shared_key" }));
+			response.setResponse(createList(response.getResponseJson(), "friends", "friend", new String[] { "id", "email", "status", "shared_key", "data_store" }));
+		}
+		return response;
+	}
+
+	public void syncFriendList(Context context) {
+		try {
+			List<Friend> friendList = (List<Friend>)getFriendList().getResponse();
+			FriendManager friendManager = new FriendManager(context);
+			for (Friend friend : friendList) {
+				friendManager.addFriend(friend);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public Response getFriendList() throws ClientProtocolException, IOException, JSONException {
+		HashMap<String, String> params = new HashMap<String, String>();
+		putAuthHeader(params);
+		Response response = get("/friends.json", params);
+		if (response.getStatus() == ResponseStatus.STATUS_SUCCESS) {
+			response.setMessage("Friend List");
+			List<HashMap<String, String>> friendMapList = createList(response.getResponseJson(), "friends", "friend", new String[] { "id", "email", "status", "shared_key", "data_store" });
+			List<Friend> friendList = new ArrayList<Friend>();
+			for (HashMap<String,String> friendMap : friendMapList) {
+				friendList.add(new Friend(friendMap.get("email"), friendMap.get("data_store"), friendMap.get("shared_key")));
+			}
+			response.setResponse(friendList);
 		}
 		return response;
 	}
@@ -39,7 +70,7 @@ public class FriendService extends AuthenticatedWebService {
 		String sharedKey = generateSharedKey();
 		Response response = postFriendRequest(friendsEmail, friendsDataServer, sharedKey);
 		if (response.isOk()) {
-			response = saveFriendRequested(friendsEmail, sharedKey, myDataServer);
+			response = saveFriendRequested(friendsEmail, sharedKey, myDataServer, friendsDataServer);
 			if (response.isOk()) {
 				response.setMessage("Friend request sent");
 			}
@@ -54,6 +85,7 @@ public class FriendService extends AuthenticatedWebService {
 		params.put("email", email);
 		params.put("friend_with", friendsEmail);
 		params.put("shared_key", sharedKey);
+		params.put("data_store", DataHosts.DATA_SERVER);
 		Response response = post("/friends/handle_friend_req.json", params);
 		if (response.isOk()) {
 			response.setMessage("Friend request sent");
@@ -81,6 +113,18 @@ public class FriendService extends AuthenticatedWebService {
 		return response;
 	}
 
+	public Response attachProfile(String friendsEmail, int profileId) throws ClientProtocolException, IOException, JSONException {
+		HashMap<String, String> params = new HashMap<String, String>();
+		putAuthHeader(params);
+		params.put("friends_email", friendsEmail);
+		params.put("profile_id", String.valueOf(profileId));
+		Response response = post("/friends/attach_profile.json", params);
+		if (response.isOk()) {
+			response.setMessage("Profile attached");
+		}
+		return response;
+	}
+
 	public Response notifyAcceptedFriendRequest(String friendsEmail, String friendsDataServer, String sharedKey) throws ClientProtocolException,
 			IOException, JSONException {
 		setBaseUrl(friendsDataServer);
@@ -95,13 +139,14 @@ public class FriendService extends AuthenticatedWebService {
 		return response;
 	}
 
-	public Response saveFriendRequested(String friendsEmail, String sharedKey, String myDataServer) throws ClientProtocolException, IOException,
+	public Response saveFriendRequested(String friendsEmail, String sharedKey, String myDataServer, String friendsDataServer) throws ClientProtocolException, IOException,
 			JSONException {
 		setBaseUrl(myDataServer);
 		HashMap<String, String> params = new HashMap<String, String>();
 		putAuthHeader(params);
 		params.put("friend_with", friendsEmail);
 		params.put("shared_key", sharedKey);
+		params.put("data_store", DataHosts.DATA_SERVER);
 		Response response = post("/friends/save_friend_requested.json", params);
 		if (response.getStatus() == ResponseStatus.STATUS_SUCCESS) {
 			response.setMessage("Friend request sent");

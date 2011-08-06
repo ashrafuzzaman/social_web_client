@@ -22,5 +22,8 @@
 		<activity android:name=".NotificationActivity" />
 		<activity android:name=".PostStatus" />
 		<activity android:name=".MyStatusActivity" />
+		<activity android:name=".FriendsStatusActivity" />
+		<activity android:name=".ManageFriendActivity" />
+		<activity android:name=".FriendsProfileActivity" />
 	</application>
 </manifest>

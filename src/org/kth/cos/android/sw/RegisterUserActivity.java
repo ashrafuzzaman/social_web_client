@@ -15,6 +15,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -36,7 +37,10 @@ public class RegisterUserActivity extends BaseActivity {
 	}
 
 	private void loadEmail() {
-		((TextView) findViewById(R.id.txtEmail)).setText(new AccountHelper().getDefaultEmailName(this));
+		String email = new AccountHelper().getDefaultEmailName(this);
+		if (!TextUtils.isEmpty(email)) {
+			((TextView) findViewById(R.id.txtEmail)).setText(email);
+		}
 	}
 
 	private void attachBtnCancel() {

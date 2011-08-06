@@ -39,7 +39,7 @@ public class PostStatus extends BaseActivity {
 				    	UserAccount account = UserAccount.getAccount(PostStatus.this);
 				    	try {
 							new StatusService(account.getEmail(), account.getDataAuthToken()).postStatus(status, profiles.get(item).getProfileId());
-							showMessage("Status posted");
+							startNewActivity(MyStatusActivity.class, true);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}

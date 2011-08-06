@@ -1,23 +1,14 @@
 package org.kth.cos.android.sw;
 
-import java.io.IOException;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
 import org.kth.cos.android.sw.data.Response;
 import org.kth.cos.android.sw.data.ResponseStatus;
 import org.kth.cos.android.sw.data.UserAccount;
-import org.kth.cos.android.sw.network.DataAuthenticationService;
 import org.kth.cos.android.sw.network.DataHosts;
 import org.kth.cos.android.sw.network.DataServerService;
 import org.kth.cos.android.sw.network.SigninService;
-import org.kth.cos.android.sw.network.UserAuthenticationService;
 
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -37,7 +28,8 @@ public class SigninUserActivity extends BaseActivity {
 			String email = profile.getEmail();
 			if (TextUtils.isEmpty(email))
 				email = new AccountHelper().getDefaultEmailName(this);
-			((TextView) findViewById(R.id.txtEmail)).setText(email);
+			if (!TextUtils.isEmpty(email))
+				((TextView) findViewById(R.id.txtEmail)).setText(email);
 			attachSigninBtnEvent();
 			attachBtnCancel();
 		}

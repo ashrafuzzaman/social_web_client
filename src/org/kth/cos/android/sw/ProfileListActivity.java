@@ -106,7 +106,7 @@ public class ProfileListActivity extends ListActivity {
 			ProfileService profileService = getProfileService();
 			Response response;
 			try {
-				response = profileService.deleteProfile(profileId);
+				response = profileService.deleteProfile(profileId, ProfileListActivity.this);
 				if (response.getStatus() == ResponseStatus.STATUS_SUCCESS) {
 					startLoadingList();
 				}
@@ -141,16 +141,11 @@ public class ProfileListActivity extends ListActivity {
 
 		alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
-				// progressDialog =
-				// ProgressDialog.show(ProfileListActivity.this, "Wait",
-				// "Creating new profile...", true);
 				new Thread(new Runnable() {
 					public void run() {
 						Looper.prepare();
 						String profileName = input.getText().toString();
 						saveNewProfile(profileName);
-						// progressDialog.dismiss();
-						//startLoadingList();
 						Looper.loop();
 					}
 				}).start();

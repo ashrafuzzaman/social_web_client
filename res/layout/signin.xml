@@ -12,7 +12,7 @@
 				android:text="@string/email" android:layout_width="wrap_content"></TextView>
 			<EditText android:layout_width="wrap_content" android:inputType="textEmailAddress"
 				android:layout_height="wrap_content" android:id="@+id/txtEmail"
-				android:text="@string/testEmail"></EditText>
+				android:text="ashrafuzzaman.g2@gmail.com"></EditText>
 		</TableRow>
 		<TableRow android:id="@+id/tableRow2" android:layout_width="wrap_content"
 			android:layout_height="wrap_content">
@@ -20,7 +20,7 @@
 				android:layout_width="wrap_content" android:text="@string/password"></TextView>
 			<EditText android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:id="@+id/txtPass"
-				android:password="true" android:text="@string/testPass"></EditText>
+				android:password="true" android:text="123456"></EditText>
 
 		</TableRow>
 		<TableRow android:id="@+id/tableRow3" android:layout_width="wrap_content"

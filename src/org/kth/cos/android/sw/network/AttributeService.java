@@ -29,6 +29,20 @@ public class AttributeService extends AuthenticatedWebService {
 		return response;
 	}
 
+	public Response getFriendsAttributeList(String friendsDatastore,String friendsEmail, String sharedKey) throws ClientProtocolException, IOException, JSONException {
+		HashMap<String, String> params = new HashMap<String, String>();
+		setBaseUrl(friendsDatastore);
+		params.put("friends_email", email);
+		params.put("email", friendsEmail);
+		params.put("shared_key", sharedKey);
+		Response response = get("/profile_attributes/friends_profile_attribute.json", params);
+		if (response.getStatus() == ResponseStatus.STATUS_SUCCESS) {
+			response.setMessage("Attributes list");
+			response.setResponse(createList(response.getResponseJson(), "profile_attributes", "profile_attribute", new String[] {"id", "name", "value", "attribute_type"}));
+		}
+		return response;
+	}
+
 	public Response updateAttributeList(int profileId, List<String> attributes) throws ClientProtocolException, IOException, JSONException {
 		HashMap<String, String> params = new HashMap<String, String>();
 		putAuthHeader(params);
