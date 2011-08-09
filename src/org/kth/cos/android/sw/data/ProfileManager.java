@@ -11,10 +11,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class ProfileManager extends SQLiteOpenHelper {
 	public static final String DATABASE_NAME = "social_web";
 	public static final String TABLE_NAME = "profiles";
+	SQLiteDatabase database;
 
 	public ProfileManager(Context context) {
 		super(context, DATABASE_NAME, null, 1);
@@ -46,6 +48,7 @@ public class ProfileManager extends SQLiteOpenHelper {
 	public void addProfile(int profileId, String name) {
 		ContentValues values = new ContentValues();
 		if (fetchProfile(profileId) == null) {
+			//Log.i("Sync", String.format("Adding Profile :: [%d] %s", profileId, name));
 			values.put("profile_id", profileId);
 			values.put("name", name);
 			SQLiteDatabase database = getWritableDatabase();
@@ -84,7 +87,14 @@ public class ProfileManager extends SQLiteOpenHelper {
 			} while (cursor.moveToNext());
 		}
 		cursor.close();
+		closeDatabase();
+
 		return friendList;
+	}
+
+	public void closeDatabase() {
+		if(database != null && database.isOpen())
+			database.close();
 	}
 
 	public static String[] fetchAllProfileName(List<Profile> profiles) {
@@ -96,9 +106,8 @@ public class ProfileManager extends SQLiteOpenHelper {
 	}
 
 	public Cursor fetchProfileCursor() {
-		SQLiteDatabase database = getReadableDatabase();
+		database = getReadableDatabase();
 		Cursor cursor = database.query(TABLE_NAME, new String[] { "profile_id", "name" }, null, null, null, null, null);
-		database.close();
 		return cursor;
 	}
 

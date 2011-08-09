@@ -55,8 +55,9 @@ public class StatusService extends AuthenticatedWebService {
 					"created_at", "profile_name" });
 
 			List<Status> statusList = new ArrayList<Status>();
+			String friendsEmail = params.get("email");
 			for (HashMap<String, String> statusMap : statusMapList) {
-				statusList.add(new Status(statusMap.get("value"), statusMap.get("profile_name"), statusMap.get("created_at")));
+				statusList.add(new Status(Integer.parseInt(statusMap.get("id")), statusMap.get("value"), statusMap.get("profile_name"), statusMap.get("created_at"), friendsEmail));
 			}
 			response.setResponse(statusList);
 		}

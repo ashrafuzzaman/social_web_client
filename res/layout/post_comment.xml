@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/statusContent" android:layout_width="fill_parent"
+	android:layout_height="wrap_content" android:padding="10px">
+
+	<TextView android:layout_width="fill_parent" android:id="@+id/lbComment"
+		android:layout_height="wrap_content" android:text="Post your comment" />
+	<EditText android:inputType="textMultiLine" android:lines="3"
+		android:layout_height="wrap_content" android:id="@+id/txtComment"
+		android:layout_width="fill_parent" android:layout_below="@id/lbComment"
+		android:layout_alignParentLeft="true">
+		<requestFocus></requestFocus>
+	</EditText>
+	<Button android:layout_width="wrap_content"
+		android:layout_below="@id/txtComment" android:layout_alignParentLeft="true"
+		android:layout_height="wrap_content" android:text="Post" android:id="@+id/btnPost"></Button>
+	<Button android:layout_width="wrap_content"
+		android:layout_toRightOf="@id/btnPost" android:layout_below="@id/txtComment"
+		android:layout_height="wrap_content" android:text="Cancel" android:id="@+id/btnCancel"></Button>
+</RelativeLayout>

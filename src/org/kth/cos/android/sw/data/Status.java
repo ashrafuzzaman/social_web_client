@@ -4,7 +4,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Status {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Status implements Parcelable {
+	private int id;
 	private String value;
 	private String profileName;
 	private String postedBy;
@@ -13,17 +17,50 @@ public class Status {
 	public Status() {
 	}
 
-	public Status(String value, String profileName, String postedAtStr) throws ParseException {
-		this.value = value;
-		this.profileName = profileName;
-		this.postedAt = parseDate(postedAtStr);
-	}
-
-	public Status(String value, String profileName, String postedBy, String postedAtStr) throws ParseException {
+	public Status(int id, String value, String profileName, String postedAtStr, String postedBy) throws ParseException {
+		this.id = id;
 		this.value = value;
 		this.profileName = profileName;
 		this.postedAt = parseDate(postedAtStr);
 		this.postedBy = postedBy;
+	}
+
+	public Status(Parcel in) {
+		readFromParcel(in);
+	}
+
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeInt(id);
+		dest.writeString(value);
+		dest.writeString(profileName);
+		dest.writeSerializable(postedAt);
+		dest.writeString(postedBy);
+	}
+
+	private void readFromParcel(Parcel in) {
+		id = in.readInt();
+		value = in.readString();
+		profileName = in.readString();
+		postedAt = (Date) in.readSerializable();
+		postedBy = in.readString();
+	}
+
+	public static final Parcelable.Creator<Status> CREATOR = new Parcelable.Creator<Status>() {
+		public Status createFromParcel(Parcel in) {
+			return new Status(in);
+		}
+
+		public Status[] newArray(int size) {
+			return new Status[size];
+		}
+	};
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getValue() {
@@ -64,6 +101,10 @@ public class Status {
 
 	public void setPostedBy(String postedBy) {
 		this.postedBy = postedBy;
+	}
+
+	public int describeContents() {
+		return 0;
 	}
 
 }

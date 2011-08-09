@@ -49,6 +49,7 @@ public class Welcome extends BaseActivity {
 
 	private void attachBtnExit() {
 		Button btnExit = (Button) findViewById(R.id.btnExit);
+		makeVisible(R.id.btnExit);
 		btnExit.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				Welcome.this.finish();

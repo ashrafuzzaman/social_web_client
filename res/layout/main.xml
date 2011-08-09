@@ -39,12 +39,11 @@
 		<Button android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:id="@+id/btnClrCach"
 			android:text="Log out"></Button>
-		<Button android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:id="@+id/btnFrndDataStore"
-			android:text="@string/friendsDatastore"></Button>
 	</LinearLayout>
-
-	<Button android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:id="@+id/btnExit"
-		android:text="@string/exit"></Button>
+	<LinearLayout android:orientation="vertical"
+		android:layout_width="fill_parent" android:layout_height="fill_parent">
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/btnExit"
+			android:text="@string/exit"></Button>
+	</LinearLayout>
 </LinearLayout>

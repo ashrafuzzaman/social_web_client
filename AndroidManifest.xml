@@ -25,5 +25,6 @@
 		<activity android:name=".FriendsStatusActivity" />
 		<activity android:name=".ManageFriendActivity" />
 		<activity android:name=".FriendsProfileActivity" />
+		<activity android:name=".StatusDetails" />
 	</application>
 </manifest>

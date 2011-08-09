@@ -8,13 +8,13 @@ import org.kth.cos.android.sw.data.Response;
 import org.kth.cos.android.sw.data.ResponseStatus;
 import org.kth.cos.android.sw.data.Status;
 import org.kth.cos.android.sw.data.UserAccount;
-import org.kth.cos.android.sw.network.FriendService;
 import org.kth.cos.android.sw.network.StatusService;
 
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -95,6 +95,13 @@ public class FriendsStatusActivity extends ListActivity {
 			final Status status = statusList.get(position);
 			((TextView) v.findViewById(R.id.txtStatus)).setText(status.getValue());
 			((TextView) v.findViewById(R.id.txtPostedAt)).setText(status.getPostedAtStr());
+			v.findViewById(R.id.statusContent).setOnClickListener((new View.OnClickListener() {
+				public void onClick(View v) {
+					Intent myIntent = new Intent(FriendsStatusActivity.this, StatusDetails.class);
+					myIntent.putExtra("status", status);
+					FriendsStatusActivity.this.startActivity(myIntent);
+				}
+			}));
 			return v;
 		}
 	}
