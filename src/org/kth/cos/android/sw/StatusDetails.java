@@ -1,8 +1,13 @@
 package org.kth.cos.android.sw;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.kth.cos.android.sw.data.Comment;
+import org.kth.cos.android.sw.data.Friend;
+import org.kth.cos.android.sw.data.FriendManager;
 import org.kth.cos.android.sw.data.Response;
 import org.kth.cos.android.sw.data.ResponseStatus;
 import org.kth.cos.android.sw.data.Status;
@@ -45,19 +50,38 @@ public class StatusDetails extends BaseActivity {
 	}
 
 	private void generateList() {
+		comments = new ArrayList<Comment>();
 		CommentService statusService = getCommentService();
-		// FriendManager friendManager = new
-		// FriendManager(FriendsStatusActivity.this);
-		// List<Friend> friendList = friendManager.fetchAllFriend();
+		FriendManager friendManager = new FriendManager(StatusDetails.this);
+		List<Friend> friendList = friendManager.fetchAllFriend();
 		try {
-			String friendsEmail = status.getPostedBy();
-			Response response = statusService.getMyComments("Status", status.getId(), friendsEmail);
+			String statusBy = status.getPostedBy();
+			Response response = statusService.getMyComments("Status", status.getId(), statusBy);
 			if (response.getStatus() == ResponseStatus.STATUS_SUCCESS) {
-				comments = (List<Comment>) (response.getResponse());
+				comments.addAll((List<Comment>) (response.getResponse()));
 			}
+
+			for (Friend friend : friendList) {
+				response = statusService.getFriendsComments("Status", status.getId(), friend.getEmail(), friend.getDataStore(),
+						friend.getSharedKey(), statusBy);
+				if (response.getStatus() == ResponseStatus.STATUS_SUCCESS) {
+					comments.addAll((List<Comment>) (response.getResponse()));
+				}
+			}
+
+			sortComments();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void sortComments() {
+		Collections.sort(comments, new Comparator<Comment>() {
+			public int compare(Comment comment1, Comment comment2) {
+				return comment1.getPostedAt().compareTo(comment2.getPostedAt());
+			}
+		});
 	}
 
 	private void promptComment() {

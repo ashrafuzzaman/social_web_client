@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class Welcome extends BaseActivity {
 	/** Called when the activity is first created. */
@@ -24,15 +25,16 @@ public class Welcome extends BaseActivity {
 	}
 
 	private void generateView() {
-		UserAccount profile = UserAccount.getAccount(this);
-		Log.i("INFO", String.format("Profile:: %s [%s]", profile.getEmail(), profile.getAuthToken()));
+		UserAccount account = UserAccount.getAccount(this);
+		Log.i("INFO", String.format("Profile:: %s [%s]", account.getEmail(), account.getAuthToken()));
 		makeInvisible(R.id.loggedInLayout);
 		makeInvisible(R.id.loggedOutLayout);
-		if (!profile.isSignedIn()) {
+		if (!account.isSignedIn()) {
 			makeVisible(R.id.loggedOutLayout);
 			attachButton(R.id.btnRegister, RegisterUserActivity.class, true);
 			attachButton(R.id.btnSignin, SigninUserActivity.class, true);
 		} else {
+			((TextView)findViewById(R.id.txtWelcome)).setText("Logged in as :: " + account.getEmail());
 			makeVisible(R.id.loggedInLayout);
 			attachBtnClearCach();
 			attachButton(R.id.btnMyStatus, MyStatusActivity.class, false);
