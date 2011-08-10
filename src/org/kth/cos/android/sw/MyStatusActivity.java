@@ -13,6 +13,7 @@ import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -91,6 +92,13 @@ public class MyStatusActivity extends ListActivity {
 			final Status status = statusList.get(position);
 			((TextView) v.findViewById(R.id.txtStatus)).setText(status.getValue());
 			((TextView) v.findViewById(R.id.txtPostedAt)).setText(status.getPostedAtStr());
+			v.findViewById(R.id.statusContent).setOnClickListener((new View.OnClickListener() {
+				public void onClick(View v) {
+					Intent myIntent = new Intent(MyStatusActivity.this, StatusDetails.class);
+					myIntent.putExtra("status", status);
+					MyStatusActivity.this.startActivity(myIntent);
+				}
+			}));
 			return v;
 		}
 	}

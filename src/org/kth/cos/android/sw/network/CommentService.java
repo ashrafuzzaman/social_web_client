@@ -25,8 +25,10 @@ public class CommentService extends AuthenticatedWebService {
 		params.put("resource_type", resourceType);
 		params.put("resource_id", String.valueOf(resourceId));
 		params.put("comment", comment);
-		params.put("friends_email", friendsEmail);
-		Response response = post("/comments/post_comment_on_friend", params);
+		if (!email.equals(friendsEmail)) {
+			params.put("friends_email", friendsEmail);			
+		}
+		Response response = post("/comments/post_comment", params);
 		if (response.isOk()) {
 			response.setMessage("Comment posted");
 		}
@@ -39,11 +41,11 @@ public class CommentService extends AuthenticatedWebService {
 		putAuthHeader(params);
 		params.put("resource_type", resourceType);
 		params.put("resource_id", String.valueOf(resourceId));
-		params.put("friends_email", friendsEmail);
+		if (!email.equals(friendsEmail)) {
+			params.put("friends_email", friendsEmail);			
+		}
 		Response response = get("/comments", params);
 		if (response.isOk()) {
-			response.setMessage("Comment posted");
-
 			List<HashMap<String, String>> commentMapList = createList(response.getResponseJson(), "comments", "comment", new String[] { "id",
 					"comment", "created_at" });
 
