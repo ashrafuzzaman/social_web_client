@@ -4,8 +4,8 @@ import org.kth.cos.android.sw.data.UserAccount;
 
 public class DataAuthenticationService extends AuthenticationService {
 
-	public DataAuthenticationService() {
-		super(DataHosts.DATA_SERVER);
+	public DataAuthenticationService(String dataServer) {
+		super(dataServer);
 	}
 
 	@Override

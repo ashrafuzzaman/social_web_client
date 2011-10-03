@@ -50,6 +50,8 @@ public class ManageFriendActivity extends ListActivity {
 			}
 			final Friend friend = friendList.get(position);
 			final TextView txtEmail = (TextView) v.findViewById(R.id.txtEmail);
+			if(friendList == null || friendList.size() <= 0 )
+				return v;
 			txtEmail.setText(friend.getEmail());
 			txtEmail.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
@@ -80,7 +82,7 @@ public class ManageFriendActivity extends ListActivity {
 						public void onClick(DialogInterface dialog, int profileIndex) {
 							UserAccount account = UserAccount.getAccount(ManageFriendActivity.this);
 							try {
-								new FriendService(account.getEmail(), account.getDataAuthToken()).attachProfile(friend.getEmail(),
+								new FriendService(account.getEmail(), account.getDataAuthToken(), account.getDataStoreServer()).attachProfile(friend.getEmail(),
 										profiles.get(profileIndex).getProfileId());
 							} catch (Exception e) {
 								e.printStackTrace();

@@ -14,8 +14,8 @@ import org.kth.cos.android.sw.data.Status;
 
 public class CommentService extends AuthenticatedWebService {
 
-	public CommentService(String email, String auth_token) {
-		super(DataHosts.DATA_SERVER, email, auth_token);
+	public CommentService(String email, String auth_token, String dataServer) {
+		super(dataServer, email, auth_token);
 	}
 
 	public Response postComment(String resourceType, int resourceId, String comment, String friendsEmail) throws ClientProtocolException,

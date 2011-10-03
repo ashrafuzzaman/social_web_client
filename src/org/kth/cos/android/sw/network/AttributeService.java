@@ -12,8 +12,8 @@ import org.kth.cos.android.sw.data.ResponseStatus;
 
 public class AttributeService extends AuthenticatedWebService {
 
-	public AttributeService(String email, String auth_token) {
-		super(DataHosts.DATA_SERVER, email, auth_token);
+	public AttributeService(String email, String auth_token, String dataServer) {
+		super(dataServer, email, auth_token);
 	}
 	
 	//http://localhost:3000/profiles/3/all_attributes.json?email=ashrafuzzaman.g2@gmail.com&auth_token=7w38pGIRZ1cS1fpVpP9C

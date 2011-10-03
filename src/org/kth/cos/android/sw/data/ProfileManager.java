@@ -20,7 +20,7 @@ public class ProfileManager extends SQLiteOpenHelper {
 
 	public ProfileManager(Context context) {
 		super(context, DATABASE_NAME, null, 1);
-		// createDatabase(getWritableDatabase());
+		createDatabase(getWritableDatabase());
 	}
 
 	@Override

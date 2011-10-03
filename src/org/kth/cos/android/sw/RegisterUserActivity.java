@@ -8,10 +8,13 @@ import org.kth.cos.android.sw.data.Response;
 import org.kth.cos.android.sw.data.ResponseStatus;
 import org.kth.cos.android.sw.data.UserAccount;
 import org.kth.cos.android.sw.network.DataAuthenticationService;
+import org.kth.cos.android.sw.network.DataHosts;
 import org.kth.cos.android.sw.network.UserAuthenticationService;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -58,28 +61,44 @@ public class RegisterUserActivity extends BaseActivity {
 		Button button = (Button) findViewById(R.id.btnRegister);
 		button.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				String email = ((TextView) findViewById(R.id.txtEmail)).getText().toString();
-				String pass = ((TextView) findViewById(R.id.txtPass)).getText().toString();
+				final String email = ((TextView) findViewById(R.id.txtEmail)).getText().toString();
+				final String pass = ((TextView) findViewById(R.id.txtPass)).getText().toString();
 				String confirmPass = ((TextView) findViewById(R.id.txtConfimPass)).getText().toString();
 				if (!pass.equals(confirmPass)) {
-					showMessage("Password does not match [" + pass + "] with [" + confirmPass + "]");
+					showMessage("Password does not match with confirm password");
 					return;
 				} else {
-					new RegisterAsyncTask(RegisterUserActivity.this, email, pass).execute();
-					// register(email, pass);
+					// fetching data host
+					AlertDialog.Builder builder = new AlertDialog.Builder(RegisterUserActivity.this);
+					builder.setTitle("Dataservers");
+					final String[] dataServers = DataHosts.DATA_SERVERS;
+					builder.setItems(dataServers, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int item) {
+							final String dataServer = dataServers[item];
+							//new RegisterAsyncTask(RegisterUserActivity.this, email, pass, dataServer).execute();
+							register(email, pass, dataServer);
+							dialog.dismiss();
+						}
+					});
+					builder.create().show();
 				}
 			}
 
 		});
 	}
 
-	public void register(String email, String pass) {
+	public void register(final String email, final String pass, final String dataServer) {
 		try {
-			Response responseStatus = new UserAuthenticationService().register(email, pass);
+			final Response responseStatus = new UserAuthenticationService().register(email, pass);
 			if (responseStatus.getStatus() == ResponseStatus.STATUS_SUCCESS) {
-				UserAccount profile = new UserAccount(email, pass);
-				profile.save(RegisterUserActivity.this);
-				responseStatus = new DataAuthenticationService().register(email, pass);
+				UserAccount account = new UserAccount(email, pass);
+				account.setDataStoreServer(dataServer);
+				account.save(RegisterUserActivity.this);
+				Log.i("dataserver", dataServer);
+				Response dataAuthResponseStatus = new DataAuthenticationService(dataServer).register(email, pass);
+				if (responseStatus.getStatus() == ResponseStatus.STATUS_SUCCESS) {
+
+				}
 				switchToSigninActivity();
 			} else {
 				Toast.makeText(getBaseContext(), responseStatus.getMessage(), Toast.LENGTH_LONG).show();
@@ -107,12 +126,14 @@ public class RegisterUserActivity extends BaseActivity {
 
 		String email;
 		String pass;
+		String dataServer;
 
-		public RegisterAsyncTask(RegisterUserActivity applicationContext, String email, String pass) {
+		public RegisterAsyncTask(RegisterUserActivity applicationContext, String email, String pass, String dataServer) {
 			super();
 			this.applicationContext = applicationContext;
 			this.email = email;
 			this.pass = pass;
+			this.dataServer = dataServer;
 		}
 
 		@Override
@@ -122,7 +143,7 @@ public class RegisterUserActivity extends BaseActivity {
 
 		@Override
 		protected Object doInBackground(Object... params) {
-			applicationContext.register(email, pass);
+			applicationContext.register(email, pass, dataServer);
 			return null;
 		}
 

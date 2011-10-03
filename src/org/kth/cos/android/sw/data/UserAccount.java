@@ -68,7 +68,6 @@ public class UserAccount {
 	}
 
 	public void clear(Activity currentActivity) {
-		email = "";
 		password = "";
 		authToken = "";
 		save(currentActivity);
@@ -109,6 +108,10 @@ public class UserAccount {
 	public String getDataAuthToken() {
 		return dataAuthToken;
 	}
+	
+	public void setDataStoreServer(String dataStoreServer) {
+		this.dataStoreServer = dataStoreServer;
+	}
 
 	public void save(Activity currentActivity) {
 		SharedPreferences settings = currentActivity.getSharedPreferences(PREFS_NAME, 0);
@@ -117,6 +120,7 @@ public class UserAccount {
 		editor.putString(USER_PASSWORD, password);
 		editor.putString(AUTH_TOKEN, authToken);
 		editor.putString(DATA_AUTH_TOKEN, dataAuthToken);
+		editor.putString(DATA_STORE_SERVER, dataStoreServer);
 		editor.commit();
 	}
 
@@ -131,6 +135,8 @@ public class UserAccount {
 			editor.putString(AUTH_TOKEN, authToken);
 		if (!TextUtils.isEmpty(dataAuthToken))
 			editor.putString(DATA_AUTH_TOKEN, dataAuthToken);
+		if (!TextUtils.isEmpty(dataStoreServer))
+			editor.putString(DATA_STORE_SERVER, dataStoreServer);
 		editor.commit();
 	}
 

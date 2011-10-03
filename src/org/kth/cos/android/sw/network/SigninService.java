@@ -8,18 +8,19 @@ import android.app.Activity;
 
 public class SigninService {
 
-	public Response signIn(final String email, final String pass, Activity currentActivity) {
+	public Response signIn(final String email, final String pass, Activity currentActivity, String dataServer) {
 		Response response = null;
 		try {
 			response = new UserAuthenticationService().signin(email, pass);
 			if (response.getStatus() == ResponseStatus.STATUS_SUCCESS) {
-				UserAccount profile = (UserAccount) response.getResponse();
-				profile.save(currentActivity);
+				UserAccount account = (UserAccount) response.getResponse();
+				account.save(currentActivity);
 
-				response = new DataAuthenticationService().signin(email, pass);
+				response = new DataAuthenticationService(dataServer).signin(email, pass);
 				if (response.getStatus() == ResponseStatus.STATUS_SUCCESS) {
-					profile = (UserAccount) response.getResponse();
-					profile.update(currentActivity);
+					account = (UserAccount) response.getResponse();
+					account.setDataStoreServer(dataServer);
+					account.update(currentActivity);
 				}
 			}
 		} catch (Exception e) {

@@ -68,7 +68,7 @@ public class FindFriendActivity extends BaseActivity {
 				try {
 					UserAccount account = UserAccount.getAccount(FindFriendActivity.this);
 					Log.i("User", account.toString());
-					Response response = new FriendService(account.getEmail(), account.getDataAuthToken()).doFriendRequest(friendsEmail, dataServer, DataHosts.DATA_SERVER);
+					Response response = new FriendService(account.getEmail(), account.getDataAuthToken(), account.getDataStoreServer()).doFriendRequest(friendsEmail, dataServer, account.getDataStoreServer());
 					showMessage(response.getMessage());
 				} catch (Exception e) {
 					e.printStackTrace();

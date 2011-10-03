@@ -26,5 +26,6 @@
 		<activity android:name=".ManageFriendActivity" />
 		<activity android:name=".FriendsProfileActivity" />
 		<activity android:name=".StatusDetails" />
+		<activity android:name=".SelectDataserver" />
 	</application>
 </manifest>

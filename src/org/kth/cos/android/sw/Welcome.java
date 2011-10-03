@@ -44,6 +44,7 @@ public class Welcome extends BaseActivity {
 			attachButton(R.id.btnPostStatus, PostStatus.class, false);
 			attachButton(R.id.btnFriendsStatus, FriendsStatusActivity.class, false);
 			attachButton(R.id.btnManageFriends, ManageFriendActivity.class, false);
+			attachButton(R.id.btnSelectDataserver, SelectDataserver.class, false);
 		}
 
 		attachBtnExit();
@@ -79,7 +80,7 @@ public class Welcome extends BaseActivity {
 			@Override
 			public void run() {
 				UserAccount account = UserAccount.getAccount(Welcome.this);
-				FriendService friendService = new FriendService(account.getEmail(), account.getDataAuthToken());
+				FriendService friendService = new FriendService(account.getEmail(), account.getAuthToken(), account.getDataAuthToken(), account.getDataStoreServer());
 				friendService.syncFriendList(Welcome.this);
 			}
 		}.start();
@@ -90,7 +91,7 @@ public class Welcome extends BaseActivity {
 			@Override
 			public void run() {
 				UserAccount account = UserAccount.getAccount(Welcome.this);
-				ProfileService profileService = new ProfileService(account.getEmail(), account.getDataAuthToken());
+				ProfileService profileService = new ProfileService(account.getEmail(), account.getDataAuthToken(), account.getDataStoreServer());
 				profileService.syncProfileList(Welcome.this);
 			}
 		}.start();

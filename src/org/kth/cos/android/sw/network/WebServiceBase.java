@@ -39,6 +39,11 @@ public class WebServiceBase {
 		HttpClient httpclient = new DefaultHttpClient();
 		HttpPost httpPost = createHttpPost(baseUrl + path, params);
 		HttpResponse response = httpclient.execute(httpPost);
+		
+		Log.i("Posting with", String.format("[%s] :", httpPost.getURI()));
+		for (Entry<String, String> param : params.entrySet()) {
+			Log.i("params", String.format("[%s] : [%s]", param.getKey(), param.getValue()));			
+		}
 
 		JSONObject rootJson = getJsonResponse(response);
 		if (rootJson.has(ERROR_ROOT)) {
@@ -65,6 +70,11 @@ public class WebServiceBase {
 		HttpClient httpclient = new DefaultHttpClient();
 		HttpGet httpGet = createHttpGet(baseUrl + path, params);
 		HttpResponse response = httpclient.execute(httpGet);
+
+		Log.i("Posting with", String.format("[%s] :", httpGet.getURI()));
+		for (Entry<String, String> param : params.entrySet()) {
+			Log.i("params", String.format("[%s] : [%s]", param.getKey(), param.getValue()));			
+		}
 
 		JSONObject rootJson = getJsonResponse(response);
 		if (rootJson.has(ERROR_ROOT)) {

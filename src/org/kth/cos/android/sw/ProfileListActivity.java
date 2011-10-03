@@ -41,8 +41,8 @@ public class ProfileListActivity extends ListActivity {
 	}
 
 	private void generateList() {
-		UserAccount profile = UserAccount.getAccount(this);
-		ProfileService profileService = new ProfileService(profile.getEmail(), profile.getDataAuthToken());
+		UserAccount account = UserAccount.getAccount(this);
+		ProfileService profileService = new ProfileService(account.getEmail(), account.getDataAuthToken(), account.getDataStoreServer());
 		try {
 			Response response = profileService.getProfileList(ProfileListActivity.this);
 			if (response.getStatus() == ResponseStatus.STATUS_SUCCESS) {
@@ -179,8 +179,8 @@ public class ProfileListActivity extends ListActivity {
 	}
 
 	private ProfileService getProfileService() {
-		UserAccount profile = UserAccount.getAccount(this);
-		ProfileService profileService = new ProfileService(profile.getEmail(), profile.getDataAuthToken());
+		UserAccount account = UserAccount.getAccount(this);
+		ProfileService profileService = new ProfileService(account.getEmail(), account.getDataAuthToken(), account.getDataStoreServer());
 		return profileService;
 	}
 

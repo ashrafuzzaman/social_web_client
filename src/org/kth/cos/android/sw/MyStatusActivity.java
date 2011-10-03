@@ -49,7 +49,7 @@ public class MyStatusActivity extends ListActivity {
 
 	private StatusService getStatusService() {
 		UserAccount account = UserAccount.getAccount(this);
-		StatusService statusService = new StatusService(account.getEmail(), account.getDataAuthToken());
+		StatusService statusService = new StatusService(account.getEmail(), account.getDataAuthToken(), account.getDataStoreServer());
 		return statusService;
 	}
 

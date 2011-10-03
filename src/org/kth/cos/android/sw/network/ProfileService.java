@@ -17,8 +17,8 @@ import android.util.Log;
 
 public class ProfileService extends AuthenticatedWebService {
 
-	public ProfileService(String email, String auth_token) {
-		super(DataHosts.DATA_SERVER, email, auth_token);
+	public ProfileService(String email, String auth_token, String dataServer) {
+		super(dataServer, email, auth_token);
 	}
 
 	public void syncProfileList(Context context) {

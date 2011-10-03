@@ -3,10 +3,13 @@ package org.kth.cos.android.sw;
 import org.kth.cos.android.sw.data.Response;
 import org.kth.cos.android.sw.data.ResponseStatus;
 import org.kth.cos.android.sw.data.UserAccount;
+import org.kth.cos.android.sw.network.DataAuthenticationService;
 import org.kth.cos.android.sw.network.DataHosts;
 import org.kth.cos.android.sw.network.DataServerService;
 import org.kth.cos.android.sw.network.SigninService;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -53,17 +56,28 @@ public class SigninUserActivity extends BaseActivity {
 	public void signin() {
 		final String email = ((TextView) findViewById(R.id.txtEmail)).getText().toString();
 		final String pass = ((TextView) findViewById(R.id.txtPass)).getText().toString();
-		Response response = new SigninService().signIn(email, pass, SigninUserActivity.this);
-		if (response.getStatus() == ResponseStatus.STATUS_SUCCESS) {
-			try {
-				new DataServerService(email, UserAccount.getAccount(this).getAuthToken()).updateDataServiceHost(DataHosts.DATA_SERVER);
-			} catch (Exception e) {
-				e.printStackTrace();
+
+		// fetching data host
+		AlertDialog.Builder builder = new AlertDialog.Builder(SigninUserActivity.this);
+		builder.setTitle("Dataservers");
+		final String[] dataServers = DataHosts.DATA_SERVERS;
+		builder.setItems(dataServers, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int item) {
+				final String dataServer = dataServers[item];
+				try {
+					Response response = new SigninService().signIn(email, pass, SigninUserActivity.this, dataServer);
+					if (response.getStatus() == ResponseStatus.STATUS_SUCCESS) {
+						switchToMainActivity();
+					} else {
+						showMessage(response.getMessage());
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
-			switchToMainActivity();
-		} else {
-			showMessage(response.getMessage());
-		}
+		});
+		builder.create().show();
+
 	}
 
 	private void attachSigninBtnEvent() {

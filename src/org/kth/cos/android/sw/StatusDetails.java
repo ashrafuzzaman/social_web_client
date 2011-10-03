@@ -149,7 +149,7 @@ public class StatusDetails extends BaseActivity {
 
 	private CommentService getCommentService() {
 		UserAccount account = UserAccount.getAccount(this);
-		CommentService service = new CommentService(account.getEmail(), account.getDataAuthToken());
+		CommentService service = new CommentService(account.getEmail(), account.getDataAuthToken(), account.getDataStoreServer());
 		return service;
 	}
 

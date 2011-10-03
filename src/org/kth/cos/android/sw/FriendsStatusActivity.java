@@ -52,13 +52,15 @@ public class FriendsStatusActivity extends ListActivity {
 
 	private StatusService getStatusService() {
 		UserAccount account = UserAccount.getAccount(this);
-		StatusService statusService = new StatusService(account.getEmail(), account.getDataAuthToken());
+		StatusService statusService = new StatusService(account.getEmail(), account.getDataAuthToken(), account.getDataStoreServer());
 		return statusService;
 	}
 
 	private void updateStatusListInUI() {
-		this.setListAdapter(new StatusListAdapter(this, statusList));
-		registerForContextMenu(getListView());
+		if (statusList != null) {
+			this.setListAdapter(new StatusListAdapter(this, statusList));
+			registerForContextMenu(getListView());
+		}
 		this.progressDialog.dismiss();
 	}
 

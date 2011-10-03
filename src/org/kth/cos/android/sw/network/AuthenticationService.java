@@ -23,7 +23,7 @@ public abstract class AuthenticationService extends WebServiceBase {
 		params.put("password", password);
 		Response response = post("/api/users.json", params);
 		if (response.getStatus() == ResponseStatus.STATUS_SUCCESS) {
-			response.setResponse(new UserAccount(email, password));
+			response.setResponse(new UserAccount(email, password, ""));
 		}
 		return response;
 	}

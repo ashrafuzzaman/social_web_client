@@ -52,7 +52,7 @@ public class NotificationActivity extends ListActivity {
 
 	private FriendService getFriendService() {
 		UserAccount account = UserAccount.getAccount(this);
-		FriendService friendService = new FriendService(account.getEmail(), account.getDataAuthToken());
+		FriendService friendService = new FriendService(account.getEmail(), account.getDataAuthToken(), account.getDataStoreServer());
 		return friendService;
 	}
 

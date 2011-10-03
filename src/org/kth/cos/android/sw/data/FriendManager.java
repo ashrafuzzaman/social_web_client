@@ -11,6 +11,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.provider.ContactsContract.CommonDataKinds.Email;
 
 public class FriendManager extends SQLiteOpenHelper {
 	public static final String DATABASE_NAME = "social_web";
@@ -18,6 +19,7 @@ public class FriendManager extends SQLiteOpenHelper {
 
 	public FriendManager(Context context) {
 		super(context, DATABASE_NAME, null, 1);
+		createTable(getWritableDatabase());
 	}
 
 	@Override
@@ -43,6 +45,14 @@ public class FriendManager extends SQLiteOpenHelper {
 		db.close();
 	}
 
+	public void updateDatastore(String email, String dataStore) {
+		SQLiteDatabase db = getWritableDatabase();
+		ContentValues values = new ContentValues();
+		values.put("data_store", dataStore);
+		db.update(TABLE_NAME, values, "email = ?", new String[] { email });
+		db.close();
+	}
+
 	public void addFriend(String email, String data_store, String shared_key) {
 		if (fetchFriend(email) == null) {
 			ContentValues values = new ContentValues();
@@ -61,6 +71,7 @@ public class FriendManager extends SQLiteOpenHelper {
 				null, null);
 		cursor.moveToFirst();
 		Friend friend = getFriend(cursor);
+		cursor.close();
 		database.close();
 		return friend;
 	}

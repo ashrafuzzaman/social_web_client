@@ -17,8 +17,8 @@ import android.util.Log;
 
 public class StatusService extends AuthenticatedWebService {
 
-	public StatusService(String email, String auth_token) {
-		super(DataHosts.DATA_SERVER, email, auth_token);
+	public StatusService(String email, String auth_token, String dataServer) {
+		super(dataServer, email, auth_token);
 	}
 
 	public Response getMyStatusList() throws ClientProtocolException, IOException, JSONException, ParseException {
@@ -31,7 +31,6 @@ public class StatusService extends AuthenticatedWebService {
 		HashMap<String, String> params = new HashMap<String, String>();
 		putAuthHeader(params);
 		for (Friend friend : friendList) {
-			Log.i("Friend", String.format("email :: %s, shared_key :: %s, Data store :: %s", friend.getEmail(), friend.getSharedKey(), friend.getDataStore()));
 			return getFriendsStatus(friend.getEmail(), friend.getSharedKey(), friend.getDataStore());
 		}
 		return null;

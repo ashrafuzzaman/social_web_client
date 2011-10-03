@@ -39,6 +39,9 @@
 			android:layout_height="wrap_content" android:id="@+id/btnFindFriend"
 			android:text="Find Friend"></Button>
 		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/btnSelectDataserver"
+			android:text="Select Dataserver"></Button>
+		<Button android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:id="@+id/btnClrCach"
 			android:text="Log out"></Button>
 	</LinearLayout>

@@ -61,7 +61,7 @@ public class AttributeListActivity extends ListActivity {
 
 	private AttributeService getAttributeService() {
 		UserAccount account = UserAccount.getAccount(this);
-		AttributeService attributeService = new AttributeService(account.getEmail(), account.getDataAuthToken());
+		AttributeService attributeService = new AttributeService(account.getEmail(), account.getDataAuthToken(), account.getDataStoreServer());
 		return attributeService;
 	}
 
