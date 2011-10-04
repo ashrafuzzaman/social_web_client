@@ -97,6 +97,7 @@ public class FriendsStatusActivity extends ListActivity {
 			final Status status = statusList.get(position);
 			((TextView) v.findViewById(R.id.txtStatus)).setText(status.getValue());
 			((TextView) v.findViewById(R.id.txtPostedAt)).setText(status.getPostedAtStr());
+			((TextView) v.findViewById(R.id.txtPostedBy)).setText(status.getPostedBy());
 			v.findViewById(R.id.statusContent).setOnClickListener((new View.OnClickListener() {
 				public void onClick(View v) {
 					Intent myIntent = new Intent(FriendsStatusActivity.this, StatusDetails.class);

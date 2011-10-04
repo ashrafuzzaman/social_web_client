@@ -7,8 +7,13 @@
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:id="@+id/txtStatus" android:textSize="30px" android:text="Test message"></TextView>
 	<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/txtPostedBy"
+		android:textSize="15px" android:text="ashrafuzzaman.g2@gmail.com"
+		android:layout_below="@id/txtStatus"
+		android:layout_alignParentRight="true"></TextView>
+	<TextView xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/txtPostedAt"
 		android:textSize="15px" android:text="2011-7-28"
-		android:layout_below="@id/txtStatus"
+		android:layout_below="@id/txtPostedBy"
 		android:layout_alignParentRight="true"></TextView>
 </RelativeLayout>
