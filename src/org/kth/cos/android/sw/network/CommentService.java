@@ -1,6 +1,7 @@
 package org.kth.cos.android.sw.network;
 
 import java.io.IOException;
+import java.io.SequenceInputStream;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,13 +19,14 @@ public class CommentService extends AuthenticatedWebService {
 		super(dataServer, email, auth_token);
 	}
 
-	public Response postComment(String resourceType, int resourceId, String comment, String friendsEmail) throws ClientProtocolException,
+	public Response postComment(String resourceType, int resourceId, String comment, String friendsEmail, int sqeunceNumber) throws ClientProtocolException,
 			IOException, JSONException {
 		HashMap<String, String> params = new HashMap<String, String>();
 		putAuthHeader(params);
 		params.put("resource_type", resourceType);
 		params.put("resource_id", String.valueOf(resourceId));
 		params.put("comment", comment);
+		params.put("sequence_number", String.valueOf(sqeunceNumber));
 		if (!email.equals(friendsEmail)) {
 			params.put("friends_email", friendsEmail);
 		}
@@ -58,6 +60,7 @@ public class CommentService extends AuthenticatedWebService {
 		params.put("friends_email", email);
 		params.put("resource_by", resourceBy);
 		params.put("shared_key", sharedKey);
+		setBaseUrl(dataServer);
 		Response response = get("/comments/comments_of_friend", params);
 		generateCommentList(response, friendsEmail);
 		return response;
@@ -66,11 +69,11 @@ public class CommentService extends AuthenticatedWebService {
 	public void generateCommentList(Response response, String commentBy) throws JSONException, ParseException {
 		if (response.isOk()) {
 			List<HashMap<String, String>> commentMapList = createList(response.getResponseJson(), "comments", "comment", new String[] { "id",
-					"comment", "created_at" });
+					"comment", "created_at", "sequence_number" });
 
 			List<Comment> commentList = new ArrayList<Comment>();
 			for (HashMap<String, String> commentMap : commentMapList) {
-				commentList.add(new Comment(commentMap.get("comment"), commentBy, commentMap.get("created_at")));
+				commentList.add(new Comment(commentMap.get("comment"), commentBy, commentMap.get("created_at"), commentMap.get("sequence_number")));
 			}
 			response.setResponse(commentList);
 

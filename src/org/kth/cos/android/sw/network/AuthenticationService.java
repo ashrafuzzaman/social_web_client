@@ -16,18 +16,6 @@ public abstract class AuthenticationService extends WebServiceBase {
 		super(baseUrl);
 	}
 
-	public Response register(String email, String password)
-			throws ClientProtocolException, IOException, JSONException {
-		HashMap<String, String> params = new HashMap<String, String>();
-		params.put("email", email);
-		params.put("password", password);
-		Response response = post("/api/users.json", params);
-		if (response.getStatus() == ResponseStatus.STATUS_SUCCESS) {
-			response.setResponse(new UserAccount(email, password, ""));
-		}
-		return response;
-	}
-
 	public Response signin(String email, String password)
 			throws ClientProtocolException, IOException, JSONException {
 		HashMap<String, String> params = new HashMap<String, String>();

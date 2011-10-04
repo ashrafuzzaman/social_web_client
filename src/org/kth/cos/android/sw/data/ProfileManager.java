@@ -31,6 +31,7 @@ public class ProfileManager extends SQLiteOpenHelper {
 	private void createDatabase(SQLiteDatabase db) {
 		String sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, profile_id INTEGER, name TEXT)";
 		db.execSQL(sql);
+		db.close();
 	}
 
 	@Override

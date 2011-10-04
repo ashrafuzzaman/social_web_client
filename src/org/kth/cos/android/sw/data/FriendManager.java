@@ -31,6 +31,7 @@ public class FriendManager extends SQLiteOpenHelper {
 		String sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME
 				+ " (_id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, data_store TEXT, shared_key TEXT)";
 		db.execSQL(sql);
+		db.close();
 	}
 
 	@Override

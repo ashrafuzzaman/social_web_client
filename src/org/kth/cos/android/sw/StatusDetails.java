@@ -79,7 +79,10 @@ public class StatusDetails extends BaseActivity {
 	public void sortComments() {
 		Collections.sort(comments, new Comparator<Comment>() {
 			public int compare(Comment comment1, Comment comment2) {
-				return comment1.getPostedAt().compareTo(comment2.getPostedAt());
+				if (comment1.getSequenceNumber() == comment2.getSequenceNumber())
+					return comment1.getPostedAt().compareTo(comment2.getPostedAt());
+				else
+					return comment1.getSequenceNumber() - comment2.getSequenceNumber();
 			}
 		});
 	}
@@ -97,7 +100,7 @@ public class StatusDetails extends BaseActivity {
 				CommentService commentService = getCommentService();
 				String comment = ((TextView) dialog.findViewById(R.id.txtComment)).getText().toString();
 				try {
-					commentService.postComment("Status", status.getId(), comment, status.getPostedBy());
+					commentService.postComment("Status", status.getId(), comment, status.getPostedBy(), getNewSequenceNumber());
 					startLoadingList();
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -107,6 +110,15 @@ public class StatusDetails extends BaseActivity {
 		}));
 
 		dialog.show();
+	}
+
+	private int getNewSequenceNumber() {
+		if (comments != null && comments.size() > 0) {
+			Comment comment = comments.get(comments.size() - 1);
+			return comment.getSequenceNumber() + 1;
+		}
+
+		return 1;
 	}
 
 	private void updateStatusListInUI() {
@@ -170,6 +182,7 @@ public class StatusDetails extends BaseActivity {
 			((TextView) v.findViewById(R.id.txtComment)).setText(comment.getText());
 			((TextView) v.findViewById(R.id.txtPostedBy)).setText(comment.getPostedBy());
 			((TextView) v.findViewById(R.id.txtPostedAt)).setText(comment.getPostedAtStr());
+			((TextView) v.findViewById(R.id.txtSequenceNumber)).setText(String.format("[%d]", comment.getSequenceNumber()));
 			return v;
 		}
 	}

@@ -56,28 +56,38 @@ public class SigninUserActivity extends BaseActivity {
 	public void signin() {
 		final String email = ((TextView) findViewById(R.id.txtEmail)).getText().toString();
 		final String pass = ((TextView) findViewById(R.id.txtPass)).getText().toString();
+		UserAccount account = UserAccount.getAccount(this);
+		String dataServer = account.getDataStoreServer();
 
 		// fetching data host
-		AlertDialog.Builder builder = new AlertDialog.Builder(SigninUserActivity.this);
-		builder.setTitle("Dataservers");
-		final String[] dataServers = DataHosts.DATA_SERVERS;
-		builder.setItems(dataServers, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int item) {
-				final String dataServer = dataServers[item];
-				try {
-					Response response = new SigninService().signIn(email, pass, SigninUserActivity.this, dataServer);
-					if (response.getStatus() == ResponseStatus.STATUS_SUCCESS) {
-						switchToMainActivity();
-					} else {
-						showMessage(response.getMessage());
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
+		if (!TextUtils.isEmpty(dataServer)) {
+			signinProcess(email, pass, dataServer);
+		} else {
+			AlertDialog.Builder builder = new AlertDialog.Builder(SigninUserActivity.this);
+			builder.setTitle("Dataservers");
+			final String[] dataServers = DataHosts.DATA_SERVERS;
+			builder.setItems(dataServers, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int item) {
+					final String dataServerFromInput = dataServers[item];
+					signinProcess(email, pass, dataServerFromInput);
 				}
-			}
-		});
-		builder.create().show();
+			});
+			builder.create().show();
 
+		}
+	}
+
+	public void signinProcess(final String email, final String pass, String dataServer) {
+		try {
+			Response response = new SigninService().signIn(email, pass, SigninUserActivity.this, dataServer);
+			if (response.getStatus() == ResponseStatus.STATUS_SUCCESS) {
+				switchToMainActivity();
+			} else {
+				showMessage(response.getMessage());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void attachSigninBtnEvent() {

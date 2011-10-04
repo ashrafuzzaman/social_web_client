@@ -89,7 +89,7 @@ public class RegisterUserActivity extends BaseActivity {
 
 	public void register(final String email, final String pass, final String dataServer) {
 		try {
-			final Response responseStatus = new UserAuthenticationService().register(email, pass);
+			final Response responseStatus = new UserAuthenticationService().register(email, pass, dataServer);
 			if (responseStatus.getStatus() == ResponseStatus.STATUS_SUCCESS) {
 				UserAccount account = new UserAccount(email, pass);
 				account.setDataStoreServer(dataServer);

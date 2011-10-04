@@ -70,6 +70,8 @@ public class UserAccount {
 	public void clear(Activity currentActivity) {
 		password = "";
 		authToken = "";
+		dataAuthToken  = "";
+		dataStoreServer = "";
 		save(currentActivity);
 	}
 
