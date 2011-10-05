@@ -20,18 +20,18 @@ public class ProfileManager extends SQLiteOpenHelper {
 
 	public ProfileManager(Context context) {
 		super(context, DATABASE_NAME, null, 1);
-		createDatabase(getWritableDatabase());
+		//createTable(getWritableDatabase());
 	}
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		createDatabase(db);
+		createTable(db);
 	}
 
-	private void createDatabase(SQLiteDatabase db) {
+	private void createTable(SQLiteDatabase db) {
 		String sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, profile_id INTEGER, name TEXT)";
 		db.execSQL(sql);
-		db.close();
+		//db.close();
 	}
 
 	@Override
@@ -43,6 +43,7 @@ public class ProfileManager extends SQLiteOpenHelper {
 	public void refrashTable() {
 		SQLiteDatabase db = getWritableDatabase();
 		db.delete(TABLE_NAME, null, null);
+		createTable(db);
 		db.close();
 	}
 

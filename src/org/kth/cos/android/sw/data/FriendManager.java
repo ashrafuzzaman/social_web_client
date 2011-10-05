@@ -19,7 +19,7 @@ public class FriendManager extends SQLiteOpenHelper {
 
 	public FriendManager(Context context) {
 		super(context, DATABASE_NAME, null, 1);
-		createTable(getWritableDatabase());
+		//createTable(getWritableDatabase());
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class FriendManager extends SQLiteOpenHelper {
 		String sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME
 				+ " (_id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, data_store TEXT, shared_key TEXT)";
 		db.execSQL(sql);
-		db.close();
+		//db.close();
 	}
 
 	@Override
@@ -43,6 +43,7 @@ public class FriendManager extends SQLiteOpenHelper {
 	public void refrashTable() {
 		SQLiteDatabase db = getWritableDatabase();
 		db.delete(TABLE_NAME, null, null);
+		createTable(db);
 		db.close();
 	}
 
