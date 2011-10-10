@@ -66,8 +66,10 @@ public class MyStatusActivity extends BaseActivity {
 	}
 
 	private void updateStatusListInUI() {
-		lstView.setAdapter(new StatusListAdapter(this, statusList));
-		registerForContextMenu(lstView);
+		if(statusList != null && statusList.size() > 0) {
+			lstView.setAdapter(new StatusListAdapter(this, statusList));
+			registerForContextMenu(lstView);
+		}
 		this.progressDialog.dismiss();
 	}
 

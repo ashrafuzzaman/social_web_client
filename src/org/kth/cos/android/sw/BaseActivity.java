@@ -50,4 +50,12 @@ public class BaseActivity extends Activity {
 		startNewActivity(Dashboard.class, true);
 	}
 
+	public void onClickSearch(View v) {
+		startNewActivity(FindFriendActivity.class, true);
+	}
+
+	public void onClickAbout(View v) {
+		startNewActivity(AboutActivity.class, true);
+	}
+
 }

@@ -1,5 +1,7 @@
 package org.kth.cos.android.sw;
 
+import org.kth.cos.android.sw.data.FriendManager;
+import org.kth.cos.android.sw.data.ProfileManager;
 import org.kth.cos.android.sw.data.UserAccount;
 import org.kth.cos.android.sw.network.FriendService;
 import org.kth.cos.android.sw.network.ProfileService;
@@ -28,34 +30,16 @@ public class Dashboard extends BaseActivity {
 			startNewActivity(LoginActivity.class, false);
 		} else {
 			((TextView) findViewById(R.id.txtLogin)).setText(account.getEmail());
-//			attachBtnClearCach();
 		}
-//		attachBtnExit();
 	}
 
-	private void attachBtnExit() {
-		Button btnExit = (Button) findViewById(R.id.btnExit);
-		makeVisible(R.id.btnExit);
-		btnExit.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				Dashboard.this.finish();
-			}
-		});
-	}
-
-	private void attachBtnClearCach() {
-//		Button btnClrCach = (Button) findViewById(R.id.btnClrCach);
-//		btnClrCach.setOnClickListener(new View.OnClickListener() {
-//			public void onClick(View v) {
-//				UserAccount profile = UserAccount.getAccount(Welcome.this);
-//				profile.clear(Welcome.this);
-//				profile = UserAccount.getAccount(Welcome.this);
-//				Log.i("INFO", String.format("Profile After clear:: %s [%s]", profile.getEmail(), profile.getAuthToken()));
-//				new FriendManager(Welcome.this).refrashTable();
-//				new ProfileManager(Welcome.this).refrashTable();
-//				generateView();
-//			}
-//		});
+	private void logout() {
+		UserAccount profile = UserAccount.getAccount(Dashboard.this);
+		profile.clear(Dashboard.this);
+		profile = UserAccount.getAccount(Dashboard.this);
+		new FriendManager(Dashboard.this).refrashTable();
+		new ProfileManager(Dashboard.this).refrashTable();
+		generateView();
 	}
 
 	private void syncFriendList() {
@@ -63,8 +47,8 @@ public class Dashboard extends BaseActivity {
 			@Override
 			public void run() {
 				UserAccount account = UserAccount.getAccount(Dashboard.this);
-				FriendService friendService = new FriendService(account.getEmail(), account.getAuthToken(), account.getDataAuthToken(),
-						account.getDataStoreServer());
+				FriendService friendService = new FriendService(account.getEmail(), account.getAuthToken(), account.getDataAuthToken(), account
+						.getDataStoreServer());
 				friendService.syncFriendList(Dashboard.this);
 			}
 		}.start();
@@ -101,6 +85,12 @@ public class Dashboard extends BaseActivity {
 			break;
 		case R.id.btnSelectDataserver:
 			startActivity(new Intent(getApplicationContext(), SelectDataserver.class));
+			break;
+		case R.id.btnLogout:
+			logout();
+			break;
+		case R.id.btnExit:
+			Dashboard.this.finish();
 			break;
 		default:
 			break;

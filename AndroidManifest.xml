@@ -29,5 +29,6 @@
 		<activity android:name=".StatusDetails" />
 		<activity android:name=".SelectDataserver" />
 		<activity android:name=".LoginActivity" />
+    <activity android:name=".AboutActivity" />
 	</application>
 </manifest>

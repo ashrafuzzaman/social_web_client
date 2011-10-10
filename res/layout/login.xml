@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical" android:background="@drawable/background_rpt"
-	android:layout_width="fill_parent" android:layout_height="wrap_content">
+	android:id="@+id/db1_root" android:orientation="vertical"
+	android:background="@drawable/background_rpt" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
 	<LinearLayout style="@style/TitleBar">
 		<ImageButton style="@style/TitleBarAction"
 			android:contentDescription="Home" android:src="@drawable/title_home_alt"

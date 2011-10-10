@@ -58,8 +58,10 @@ public class NotificationActivity extends BaseActivity {
 	}
 
 	private void updateAttributeListInUI() {
-		lstView.setAdapter(new NotificationListAdapter(this, notificationList));
-		registerForContextMenu(lstView);
+		if (notificationList != null && notificationList.size() > 0) {
+			lstView.setAdapter(new NotificationListAdapter(this, notificationList));
+			registerForContextMenu(lstView);
+		}
 		this.progressDialog.dismiss();
 	}
 
