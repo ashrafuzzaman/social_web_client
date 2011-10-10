@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/statusContent" android:layout_width="fill_parent"
-	android:layout_height="wrap_content" android:padding="10px">
+	android:layout_height="wrap_content" android:padding="10dp">
 
 	<TextView xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:id="@+id/txtComment" android:textSize="20px" android:text="Here goes the Comment"></TextView>
+		android:id="@+id/txtComment" android:textSize="20dp" android:text="Here goes the Comment"></TextView>
 
 	<TextView xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_width="wrap_content" android:layout_height="wrap_content"
-		android:id="@+id/txtSequenceNumber" android:textSize="15px"
+		android:id="@+id/txtSequenceNumber" android:textSize="15dp"
 		android:text="17" android:layout_below="@id/txtComment"
 		android:layout_alignParentRight="true"></TextView>
 
 	<TextView xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_width="wrap_content" android:layout_height="wrap_content"
-		android:id="@+id/txtPostedBy" android:textSize="15px"
+		android:id="@+id/txtPostedBy" android:textSize="15dp"
 		android:text="ashrafuzzaman.g2@gmail.com" android:layout_below="@id/txtComment"
 		android:layout_toLeftOf="@id/txtSequenceNumber"></TextView>
 	<TextView xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_width="wrap_content" android:layout_height="wrap_content"
-		android:id="@+id/txtPostedAt" android:textSize="15px" android:text="yyyy-MM-dd HH:mm:ss"
+		android:id="@+id/txtPostedAt" android:textSize="15dp" android:text="yyyy-MM-dd HH:mm:ss"
 		android:layout_below="@id/txtPostedBy"
 		android:layout_alignParentRight="true"></TextView>
 </RelativeLayout>

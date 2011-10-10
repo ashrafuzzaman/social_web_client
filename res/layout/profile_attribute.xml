@@ -3,9 +3,9 @@
 	android:orientation="vertical" android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
 	<TextView android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:id="@+id/txtName"
-		android:textSize="20px"></TextView>
+		android:layout_height="wrap_content" android:id="@+id/txtName" android:textStyle="bold"
+		android:textSize="20dp" android:text="Name"></TextView>
 	<TextView android:layout_width="fill_parent"
 		android:layout_height="wrap_content" android:id="@+id/txtValue"
-		android:textSize="20px"></TextView>
+		android:textSize="20dp" android:text="Jitu"></TextView>
 </LinearLayout>

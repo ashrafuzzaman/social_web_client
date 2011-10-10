@@ -4,5 +4,5 @@
 	android:orientation="vertical">
 	<TextView xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:id="@+id/txtEmail" android:textSize="20px"></TextView>
+		android:id="@+id/txtEmail" android:textSize="20dp" android:text="ashrafuzzaman.g2@gmail.com"></TextView>
 </LinearLayout>

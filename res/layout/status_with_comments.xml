@@ -20,16 +20,16 @@
 
 		<TextView xmlns:android="http://schemas.android.com/apk/res/android"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:id="@+id/txtStatus" android:textSize="22px" android:text="Test message"
-			android:padding="10px"></TextView>
+			android:id="@+id/txtStatus" android:textSize="22dp" android:text="Test message"
+			android:padding="5dp"></TextView>
 		<TextView xmlns:android="http://schemas.android.com/apk/res/android"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:id="@+id/txtPostedBy" android:textSize="15px"
+			android:id="@+id/txtPostedBy" android:textSize="15dp"
 			android:text="ashrafuzzaman.g2@gmail.com" android:layout_below="@id/txtStatus"
 			android:layout_alignParentRight="true"></TextView>
 		<TextView xmlns:android="http://schemas.android.com/apk/res/android"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:id="@+id/txtPostedAt" android:textSize="15px" android:text="2011-7-28"
+			android:id="@+id/txtPostedAt" android:textSize="15dp" android:text="2011-7-28"
 			android:layout_below="@id/txtPostedBy"
 			android:layout_alignParentRight="true"></TextView>
 		<ListView android:layout_height="wrap_content"

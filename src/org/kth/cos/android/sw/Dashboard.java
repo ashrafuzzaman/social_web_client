@@ -95,7 +95,6 @@ public class Dashboard extends BaseActivity {
 		default:
 			break;
 		}
-		Dashboard.this.finish();
 	}
 
 }
