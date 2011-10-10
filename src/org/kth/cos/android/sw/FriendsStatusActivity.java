@@ -2,6 +2,7 @@ package org.kth.cos.android.sw;
 
 import java.util.List;
 
+import org.kth.cos.android.sw.ManageFriendActivity.FriendListAdapter;
 import org.kth.cos.android.sw.data.Friend;
 import org.kth.cos.android.sw.data.FriendManager;
 import org.kth.cos.android.sw.data.Response;
@@ -11,7 +12,6 @@ import org.kth.cos.android.sw.data.UserAccount;
 import org.kth.cos.android.sw.network.StatusService;
 
 import android.app.Dialog;
-import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -21,10 +21,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
-public class FriendsStatusActivity extends ListActivity {
+public class FriendsStatusActivity extends BaseActivity {
 	List<Status> statusList;
+	private ListView lstView;
 
 	final Handler mHandler = new Handler();
 	Dialog progressDialog;
@@ -32,6 +34,8 @@ public class FriendsStatusActivity extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.basic_list);
+		lstView = (ListView) findViewById(R.id.lstView);
 		setTitle("Friends Status");
 		startLoadingList();
 	}
@@ -58,8 +62,8 @@ public class FriendsStatusActivity extends ListActivity {
 
 	private void updateStatusListInUI() {
 		if (statusList != null) {
-			this.setListAdapter(new StatusListAdapter(this, statusList));
-			registerForContextMenu(getListView());
+			lstView.setAdapter(new StatusListAdapter(this, statusList));
+			registerForContextMenu(lstView);
 		}
 		this.progressDialog.dismiss();
 	}

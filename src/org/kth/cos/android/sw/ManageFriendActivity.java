@@ -8,10 +8,8 @@ import org.kth.cos.android.sw.data.Profile;
 import org.kth.cos.android.sw.data.ProfileManager;
 import org.kth.cos.android.sw.data.UserAccount;
 import org.kth.cos.android.sw.network.FriendService;
-import org.kth.cos.android.sw.network.StatusService;
 
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,18 +18,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
-public class ManageFriendActivity extends ListActivity {
+public class ManageFriendActivity extends BaseActivity {
 	private List<Friend> friendList;
 	private List<Profile> profiles;
+	private ListView lstView;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.basic_list);
 		setTitle("Friend List");
 		friendList = new FriendManager(this).fetchAllFriend();
-		this.setListAdapter(new FriendListAdapter(this, friendList));
+		lstView = (ListView) findViewById(R.id.lstView);
+		lstView.setAdapter(new FriendListAdapter(this, friendList));
 		profiles = new ProfileManager(ManageFriendActivity.this).fetchAllProfile();
 	}
 
@@ -50,7 +52,7 @@ public class ManageFriendActivity extends ListActivity {
 			}
 			final Friend friend = friendList.get(position);
 			final TextView txtEmail = (TextView) v.findViewById(R.id.txtEmail);
-			if(friendList == null || friendList.size() <= 0 )
+			if (friendList == null || friendList.size() <= 0)
 				return v;
 			txtEmail.setText(friend.getEmail());
 			txtEmail.setOnClickListener(new View.OnClickListener() {
@@ -82,8 +84,8 @@ public class ManageFriendActivity extends ListActivity {
 						public void onClick(DialogInterface dialog, int profileIndex) {
 							UserAccount account = UserAccount.getAccount(ManageFriendActivity.this);
 							try {
-								new FriendService(account.getEmail(), account.getDataAuthToken(), account.getDataStoreServer()).attachProfile(friend.getEmail(),
-										profiles.get(profileIndex).getProfileId());
+								new FriendService(account.getEmail(), account.getDataAuthToken(), account.getDataStoreServer()).attachProfile(
+										friend.getEmail(), profiles.get(profileIndex).getProfileId());
 							} catch (Exception e) {
 								e.printStackTrace();
 							}

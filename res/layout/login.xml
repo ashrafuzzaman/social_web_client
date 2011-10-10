@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:background="@drawable/background_rpt"
+	android:layout_width="fill_parent" android:layout_height="wrap_content">
+	<LinearLayout style="@style/TitleBar">
+		<ImageButton style="@style/TitleBarAction"
+			android:contentDescription="Home" android:src="@drawable/title_home_alt"
+			android:onClick="onClickHome" />
+
+		<ImageView style="@style/TitleBarSeparator" />
+		<TextView style="@style/TitleBarText" />
+		<ImageButton style="@style/TitleBarAction" android:src="@drawable/title_about_default"
+			android:onClick="onClickAbout" />
+		<ImageButton style="@style/TitleBarAction" android:src="@drawable/title_search_alt"
+			android:onClick="onClickSearch" />
+	</LinearLayout>
+	<FrameLayout android:layout_width="200dp"
+		android:layout_gravity="center" android:layout_height="wrap_content">
+		<LinearLayout android:orientation="vertical"
+			android:layout_width="fill_parent" android:layout_height="fill_parent">
+			<Button android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:id="@+id/btnRegister"
+				android:text="@string/register"></Button>
+			<Button android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:text="@string/signin"
+				android:id="@+id/btnSignin"></Button>
+			<Button android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:id="@+id/btnExit"
+				android:text="@string/exit"></Button>
+		</LinearLayout>
+	</FrameLayout>
+</LinearLayout>
+
+

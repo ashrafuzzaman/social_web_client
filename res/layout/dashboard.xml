@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/db1_root" android:orientation="vertical"
+	android:background="@drawable/background_rpt" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	<LinearLayout style="@style/TitleBar"
+		android:baselineAligned="false" android:orientation="horizontal">
+		<TextView style="@style/TitleBarLogo" android:text="Social web"
+			android:layout_gravity="center_vertical" android:layout_marginTop="4dp"
+			android:layout_marginLeft="4dp" android:layout_marginRight="4dp" />
+		<ImageView style="@style/TitleBarSeparator" />
+		<TextView android:id="@+id/txtLogin" style="@style/TitleBarLogo"
+			android:text="zmn.ashraf@gmail.com" android:layout_gravity="center_vertical"
+			android:layout_marginTop="4dp" android:layout_marginLeft="4dp"
+			android:layout_marginRight="4dp" />
+		<TextView style="@style/TitleBarText" />
+		<ImageButton style="@style/TitleBarAction"
+			android:contentDescription="About" android:src="@drawable/title_about_default"
+			android:onClick="onClickAbout" />
+	</LinearLayout>
+	<LinearLayout android:orientation="vertical"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:layout_weight="1" android:padding="6dip">
+		<LinearLayout android:orientation="horizontal"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:layout_weight="1">
+			<Button android:id="@+id/btnNotification" style="@style/HomeButton"
+				android:onClick="onClickFeature" android:text="Notification"
+				android:drawableTop="@drawable/notification" />
+			<Button android:id="@+id/btnFriendsStatus" style="@style/HomeButton"
+				android:onClick="onClickFeature" android:text="Friends status"
+				android:drawableTop="@drawable/friends_status" />
+		</LinearLayout>
+	</LinearLayout>
+
+	<LinearLayout android:orientation="vertical"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:layout_weight="1" android:padding="6dip">
+		<LinearLayout android:orientation="horizontal"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:layout_weight="1">
+			<Button android:id="@+id/btnMyStatus" style="@style/HomeButton"
+				android:onClick="onClickFeature" android:text="My status"
+				android:drawableTop="@drawable/my_status" />
+			<Button android:id="@+id/btnManageFriends" style="@style/HomeButton"
+				android:onClick="onClickFeature" android:text="Friends"
+				android:drawableTop="@drawable/friends" />
+		</LinearLayout>
+	</LinearLayout>
+
+
+	<LinearLayout android:orientation="vertical"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:layout_weight="1" android:padding="6dip">
+		<LinearLayout android:orientation="horizontal"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:layout_weight="1">
+			<Button android:id="@+id/btnProfileList" style="@style/HomeButton"
+				android:onClick="onClickFeature" android:text="Profiles"
+				android:drawableTop="@drawable/profiles" />
+			<Button android:id="@+id/btnSelectDataserver" style="@style/HomeButton"
+				android:onClick="onClickFeature" android:text="Dataserver"
+				android:drawableTop="@drawable/dataserver" />
+		</LinearLayout>
+	</LinearLayout>
+</LinearLayout>

@@ -19,7 +19,7 @@ public class FriendManager extends SQLiteOpenHelper {
 
 	public FriendManager(Context context) {
 		super(context, DATABASE_NAME, null, 1);
-		//createTable(getWritableDatabase());
+		createTable(getWritableDatabase());
 	}
 
 	@Override

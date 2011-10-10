@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical" android:layout_width="fill_parent"
-	android:layout_height="fill_parent" android:weightSum="1">
-	<TextView android:layout_width="fill_parent"
+	android:background="@drawable/background_rpt" android:orientation="vertical"
+	android:layout_width="fill_parent" android:layout_height="wrap_content">
+	<LinearLayout style="@style/TitleBar">
+		<ImageButton style="@style/TitleBarAction"
+			android:contentDescription="Home" android:src="@drawable/title_home_alt"
+			android:onClick="onClickHome" />
+
+		<ImageView style="@style/TitleBarSeparator" />
+		<TextView style="@style/TitleBarText" />
+		<ImageButton style="@style/TitleBarAction" android:src="@drawable/title_about_default"
+			android:onClick="onClickAbout" />
+		<ImageButton style="@style/TitleBarAction" android:src="@drawable/title_search_alt"
+			android:onClick="onClickSearch" />
+	</LinearLayout>
+	<TextView android:layout_width="fill_parent" android:textSize="20px"
 		android:layout_height="wrap_content" android:text="Select a dataserver" />
 	<TextView android:layout_width="fill_parent" android:id="@+id/txtDataServer"
 		android:layout_height="wrap_content" android:text="" />

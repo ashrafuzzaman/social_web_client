@@ -48,7 +48,7 @@ public class SigninUserActivity extends BaseActivity {
 	}
 
 	private void switchToMainActivity() {
-		Intent myIntent = new Intent(SigninUserActivity.this, Welcome.class);
+		Intent myIntent = new Intent(SigninUserActivity.this, Dashboard.class);
 		SigninUserActivity.this.startActivity(myIntent);
 		SigninUserActivity.this.finish();
 	}

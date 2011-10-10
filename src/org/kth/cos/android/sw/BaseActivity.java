@@ -29,7 +29,7 @@ public class BaseActivity extends Activity {
 	}
 
 	protected void attachButton(int btnID, final Class activityClass, final boolean closeThisActivity) {
-		Button button = (Button) findViewById(btnID);
+		View button = (View) findViewById(btnID);
 		button.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				startNewActivity(activityClass, closeThisActivity);
@@ -44,6 +44,10 @@ public class BaseActivity extends Activity {
 		if (closeThisActivity) {
 			BaseActivity.this.finish();
 		}
+	}
+
+	public void onClickHome(View v) {
+		startNewActivity(Dashboard.class, true);
 	}
 
 }

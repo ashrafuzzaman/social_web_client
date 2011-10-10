@@ -1,5 +1,6 @@
 package org.kth.cos.android.sw;
 
+import java.security.acl.LastOwnerException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,13 +12,11 @@ import org.kth.cos.android.sw.network.AttributeService;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,18 +26,21 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
-public class AttributeListActivity extends ListActivity {
+public class AttributeListActivity extends BaseActivity {
 	ArrayList<HashMap<String, String>> attributeList;
 	final Handler mHandler = new Handler();
 	Dialog progressDialog;
+	private ListView lstView;
 	private int profileId;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.basic_list);
+		lstView = (ListView) findViewById(R.id.lstView);
 		setTitle("Attribute list");
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
@@ -68,7 +70,7 @@ public class AttributeListActivity extends ListActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.layout.attribute_menu, menu);
+		inflater.inflate(R.menu.attribute_menu, menu);
 		return true;
 	}
 
@@ -100,8 +102,8 @@ public class AttributeListActivity extends ListActivity {
 	}
 
 	private void updateAttributeListInUI() {
-		this.setListAdapter(new AttributeListAdapter(this, attributeList));
-		registerForContextMenu(getListView());
+		lstView.setAdapter(new AttributeListAdapter(this, attributeList));
+		registerForContextMenu(lstView);
 		this.progressDialog.dismiss();
 	}
 
@@ -182,7 +184,7 @@ public class AttributeListActivity extends ListActivity {
 	protected void promptNewAttribute() {
 		final Dialog dialog = new Dialog(AttributeListActivity.this);
 
-		dialog.setContentView(R.layout.new_attribute);
+		dialog.setContentView(R.menu.new_attribute);
 		dialog.setTitle("New attribute");
 
 		final TextView txtName = (TextView) dialog.findViewById(R.id.txtName);

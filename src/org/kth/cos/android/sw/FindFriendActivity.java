@@ -79,7 +79,7 @@ public class FindFriendActivity extends BaseActivity {
 	}
 
 	private void switchToMainActivity() {
-		Intent myIntent = new Intent(FindFriendActivity.this, Welcome.class);
+		Intent myIntent = new Intent(FindFriendActivity.this, Dashboard.class);
 		FindFriendActivity.this.startActivity(myIntent);
 		FindFriendActivity.this.finish();
 	}

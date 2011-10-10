@@ -47,7 +47,7 @@ public class SelectDataserver extends BaseActivity {
 								//try creating a user in that server
 								final Response dataAuthResponseStatus = new DataAuthenticationService(dataServer).register(account.getEmail(), account.getPassword());
 							}
-							startNewActivity(Welcome.class, true);
+							startNewActivity(Dashboard.class, true);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}

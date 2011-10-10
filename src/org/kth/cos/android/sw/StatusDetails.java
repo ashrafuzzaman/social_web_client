@@ -144,7 +144,7 @@ public class StatusDetails extends BaseActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.layout.status_menu, menu);
+		inflater.inflate(R.menu.status_menu, menu);
 		return true;
 	}
 

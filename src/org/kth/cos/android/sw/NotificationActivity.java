@@ -3,9 +3,7 @@ package org.kth.cos.android.sw;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.kth.cos.android.sw.data.FriendManager;
 import org.kth.cos.android.sw.data.Response;
 import org.kth.cos.android.sw.data.ResponseStatus;
 import org.kth.cos.android.sw.data.UserAccount;
@@ -13,7 +11,6 @@ import org.kth.cos.android.sw.network.FriendService;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -23,10 +20,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
-public class NotificationActivity extends ListActivity {
+public class NotificationActivity extends BaseActivity {
 	ArrayList<HashMap<String, String>> notificationList;
+	private ListView lstView;
 
 	final Handler mHandler = new Handler();
 	Dialog progressDialog;
@@ -34,6 +33,8 @@ public class NotificationActivity extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.basic_list);
+		lstView = (ListView) findViewById(R.id.lstView);
 		setTitle("Notifications");
 		startLoadingList();
 	}
@@ -57,8 +58,8 @@ public class NotificationActivity extends ListActivity {
 	}
 
 	private void updateAttributeListInUI() {
-		this.setListAdapter(new NotificationListAdapter(this, notificationList));
-		registerForContextMenu(getListView());
+		lstView.setAdapter(new NotificationListAdapter(this, notificationList));
+		registerForContextMenu(lstView);
 		this.progressDialog.dismiss();
 	}
 

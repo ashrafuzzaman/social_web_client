@@ -1,21 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/statusContent" android:layout_width="fill_parent"
-	android:layout_height="wrap_content">
 
-	<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:id="@+id/txtStatus" android:textSize="30px" android:text="Test message"
-		android:background="#111111" android:padding="10px"></TextView>
-	<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-		android:layout_width="wrap_content" android:layout_height="wrap_content"
-		android:id="@+id/txtPostedBy" android:textSize="15px" android:text="ashrafuzzaman.g2@gmail.com"
-		android:layout_below="@id/txtStatus" android:layout_alignParentRight="true"></TextView>
-	<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-		android:layout_width="wrap_content" android:layout_height="wrap_content"
-		android:id="@+id/txtPostedAt" android:textSize="15px" android:text="2011-7-28"
-		android:layout_below="@id/txtPostedBy" android:layout_alignParentRight="true"></TextView>
-	<ListView android:layout_height="wrap_content"
-		android:layout_width="fill_parent" android:id="@+id/lstComments"
-		android:layout_below="@id/txtPostedAt" android:layout_alignParentLeft="true"></ListView>
-</RelativeLayout>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:background="@drawable/background_rpt"
+	android:layout_width="fill_parent" android:layout_height="fill_parent">
+	<LinearLayout style="@style/TitleBar">
+		<ImageButton style="@style/TitleBarAction"
+			android:contentDescription="Home" android:src="@drawable/title_home_alt"
+			android:onClick="onClickHome" />
+
+		<ImageView style="@style/TitleBarSeparator" />
+		<TextView style="@style/TitleBarText" />
+		<ImageButton style="@style/TitleBarAction" android:src="@drawable/title_about_default"
+			android:onClick="onClickAbout" />
+		<ImageButton style="@style/TitleBarAction" android:src="@drawable/title_search_alt"
+			android:onClick="onClickSearch" />
+	</LinearLayout>
+	<RelativeLayout android:id="@+id/statusContent"
+		android:layout_width="fill_parent" android:layout_height="wrap_content">
+
+		<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:id="@+id/txtStatus" android:textSize="30px" android:text="Test message"
+			android:padding="10px"></TextView>
+		<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:id="@+id/txtPostedBy" android:textSize="15px"
+			android:text="ashrafuzzaman.g2@gmail.com" android:layout_below="@id/txtStatus"
+			android:layout_alignParentRight="true"></TextView>
+		<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:id="@+id/txtPostedAt" android:textSize="15px" android:text="2011-7-28"
+			android:layout_below="@id/txtPostedBy"
+			android:layout_alignParentRight="true"></TextView>
+		<ListView android:layout_height="wrap_content"
+			android:layout_width="fill_parent" android:id="@+id/lstComments"
+			android:layout_below="@id/txtPostedAt"
+			android:layout_alignParentLeft="true"></ListView>
+	</RelativeLayout>
+</LinearLayout>
+
+

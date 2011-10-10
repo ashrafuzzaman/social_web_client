@@ -10,7 +10,6 @@ import org.kth.cos.android.sw.network.ProfileService;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,24 +17,29 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.AdapterView.OnItemClickListener;
 
-public class ProfileListActivity extends ListActivity {
+public class ProfileListActivity extends BaseActivity {
 	ArrayList<HashMap<String, String>> profileList;
 	final Handler mHandler = new Handler();
 	Dialog progressDialog;
+	private ListView lstView;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.basic_list);
+		lstView = (ListView) findViewById(R.id.lstView);
 		setTitle("Profile list");
 		startLoadingList();
 	}
@@ -69,25 +73,28 @@ public class ProfileListActivity extends ListActivity {
 
 	private void updateProfileListInUI() {
 		SimpleAdapter mSchedule1 = new SimpleAdapter(this, profileList, R.layout.profile_rowlayout, new String[] { "name" }, new int[] { R.id.txtProfileName });
-		this.setListAdapter(mSchedule1);
-		registerForContextMenu(getListView());
+		lstView.setAdapter(mSchedule1);
+		registerForContextMenu(lstView);
+		addListItemClickEvent();
 		progressDialog.dismiss();
 	}
 
-	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		super.onListItemClick(l, v, position, id);
-		HashMap<String, String> profile = profileList.get(position);
-		Intent attributeActIntent = new Intent(ProfileListActivity.this, AttributeListActivity.class);
-		attributeActIntent.putExtra("name", profile.get("name"));
-		attributeActIntent.putExtra("id", profile.get("id"));
-		ProfileListActivity.this.startActivity(attributeActIntent);
+	protected void addListItemClickEvent() {
+		lstView.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
+				HashMap<String, String> profile = profileList.get(position);
+				Intent attributeActIntent = new Intent(ProfileListActivity.this, AttributeListActivity.class);
+				attributeActIntent.putExtra("name", profile.get("name"));
+				attributeActIntent.putExtra("id", profile.get("id"));
+				ProfileListActivity.this.startActivity(attributeActIntent);
+			}
+		});
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.layout.profile_menu, menu);
+		inflater.inflate(R.menu.profile_menu, menu);
 		return true;
 	}
 

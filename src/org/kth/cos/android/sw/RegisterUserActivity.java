@@ -50,7 +50,7 @@ public class RegisterUserActivity extends BaseActivity {
 		Button btnCancel = (Button) findViewById(R.id.btnCancel);
 		btnCancel.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				Intent myIntent = new Intent(RegisterUserActivity.this, Welcome.class);
+				Intent myIntent = new Intent(RegisterUserActivity.this, Dashboard.class);
 				RegisterUserActivity.this.startActivity(myIntent);
 				RegisterUserActivity.this.finish();
 			}
